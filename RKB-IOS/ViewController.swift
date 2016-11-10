@@ -42,7 +42,7 @@ class ViewController: UIViewController, VCSessionDelegate {
 
     var uiView: UIView!
     var btnCon: UIButton!
-
+    var gameIDText: UITextField!
     var session: VCSimpleSession?
 
     var liveData: LiveData = LiveData(wsUrl: "http://tcp.lb.hoopchina.com:3081", gameId: "78")
@@ -50,41 +50,59 @@ class ViewController: UIViewController, VCSessionDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-
         self.initUI()
-        // 22:23
         UIApplication.shared.isIdleTimerDisabled = true;
         // Do any additional setup after loading the view, typically from a nib.
-
         initVideoCore()
-
-        self.liveData.session = session
     }
 
     func initUI() {
-        self.uiView = UIView(frame: CGRect(x: 10, y: 100, width: 500, height: 100))
-        self.view.addSubview(self.uiView)
+        self.uiView = UIView(frame: CGRect(x: 0, y: 0, width: 500, height: 100))
+        uiView.backgroundColor = UIColor.gray;
+        uiView.alpha = 0.7
+        self.view.addSubview(uiView)
 
-        let gameIdLabel = UILabel(frame: CGRect(x: 10, y: 50, width: 100, height: 50))
+        let gameIdLabel = UILabel(frame: CGRect(x: 10, y: 5, width: 100, height: 50))
         gameIdLabel.text = "Game ID:"
         gameIdLabel.textColor = UIColor.red
-        gameIdLabel.backgroundColor = UIColor.white
+//        gameIdLabel.backgroundColor = UIColor.white
         self.uiView.addSubview(gameIdLabel)
 
-        self.btnCon = UIButton(frame: CGRect(x: 10, y: 100, width: 120, height: 50))
-        self.btnCon.setTitle("开始推流", for: UIControlState.normal)
-//        self.btnCon.rou
-        self.uiView.addSubview(self.btnCon)
+
+        let txf = UITextField(frame: CGRect(x: 80, y: 5, width: 70, height: 40))
+        self.gameIDText = txf
+        txf.backgroundColor = UIColor(white: 1, alpha: 0.5)
+        txf.textColor = UIColor.white
+        txf.isUserInteractionEnabled = true
+        uiView.addSubview(txf)
+
+        self.btnCon = UIButton(frame: CGRect(x: 150, y: 40, width: 120, height: 40))
+        btnCon.setTitle("开始推流", for: UIControlState.normal)
+        btnCon.backgroundColor = UIColor.blue
+//        self.btnCon.
+        btnCon.addTarget(self, action: #selector(onBtnConTap), for: UIControlEvents.touchUpInside)
+//        btnCon.contentHorizontalAlignment
+        uiView.addSubview(btnCon)
 
         //
-        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(self.onSwipe))
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(onSwipe))
         swipeUp.direction = UISwipeGestureRecognizerDirection.up
-        self.view.addGestureRecognizer(swipeUp)
+        view.addGestureRecognizer(swipeUp)
 
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(self.onSwipeDown))
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(onSwipeDown))
         swipeDown.direction = UISwipeGestureRecognizerDirection.down
-        self.view.addGestureRecognizer(swipeDown)
+        view.addGestureRecognizer(swipeDown)
+    }
+
+    func onBtnConTap(sender: Any) {
+        switch session?.rtmpSessionState {
+        case .none, .previewStarted?, .ended?, .error?:
+            session?.startRtmpSession(withURL: "rtmp://rtmp.icassi.us/live", andStreamKey: "test")
+
+        default:
+            session?.endRtmpSession()
+            break
+        }
     }
 
     func onSwipeDown(recognizer: UISwipeGestureRecognizer) {
@@ -109,6 +127,8 @@ class ViewController: UIViewController, VCSessionDelegate {
         previewView.addSubview(session!.previewView)
         session!.previewView.frame = previewView.bounds
         session!.delegate = self
+
+        self.liveData.session = session
     }
 
     override func didReceiveMemoryWarning() {
@@ -124,26 +144,29 @@ class ViewController: UIViewController, VCSessionDelegate {
     }
 
     @IBAction func btnConnectTouch(_ sender: AnyObject) {
-        switch session?.rtmpSessionState {
-        case .none, .previewStarted?, .ended?, .error?:
-            session?.startRtmpSession(withURL: "rtmp://rtmp.icassi.us/live", andStreamKey: "test")
-
-        default:
-            session?.endRtmpSession()
-            break
-        }
+//        switch session?.rtmpSessionState {
+//        case .none, .previewStarted?, .ended?, .error?:
+//            session?.startRtmpSession(withURL: "rtmp://rtmp.icassi.us/live", andStreamKey: "test")
+//
+//        default:
+//            session?.endRtmpSession()
+//            break
+//        }
     }
 
     func connectionStatusChanged(_ sessionState: VCSessionState) {
         switch session!.rtmpSessionState {
         case .starting:
-            btnConnect.setTitle("Connecting", for: UIControlState())
+            btnConnect.setTitle("链接中...", for: UIControlState())
+            btnCon.setTitle("链接中...", for: UIControlState())
 
         case .started:
-            btnConnect.setTitle("Disconnect", for: UIControlState())
+            btnConnect.setTitle("断开链接", for: UIControlState())
+            btnCon.setTitle("断开链接", for: UIControlState())
 
         default:
-            btnConnect.setTitle("Connect", for: UIControlState())
+            btnConnect.setTitle("开始推流", for: UIControlState())
+            btnCon.setTitle("开始推流", for: UIControlState())
         }
     }
 
