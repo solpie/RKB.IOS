@@ -24,7 +24,7 @@
 		2A6111A77B2C2074CA9709D4 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3079384F1C0F540F0034CC99 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		307938511C0F54170034CC99 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		6C157D2B1AD9735A00C7FAD3 /* RKB-IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "RKB-IOS.app"; path = "RKB LiveData.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C157D2B1AD9735A00C7FAD3 /* RKB LiveData.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RKB LiveData.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C157D2F1AD9735A00C7FAD3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C157D301AD9735A00C7FAD3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6C157D321AD9735A00C7FAD3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -72,7 +72,7 @@
 		6C157D2C1AD9735A00C7FAD3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6C157D2B1AD9735A00C7FAD3 /* RKB-IOS.app */,
+				6C157D2B1AD9735A00C7FAD3 /* RKB LiveData.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -131,7 +131,7 @@
 			);
 			name = "RKB-IOS";
 			productName = "SampleBroadcaster-Swift";
-			productReference = 6C157D2B1AD9735A00C7FAD3 /* RKB-IOS.app */;
+			productReference = 6C157D2B1AD9735A00C7FAD3 /* RKB LiveData.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -371,7 +371,7 @@
 					"\"${PODS_ROOT}/Headers/Public/glm\"/**",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/RKB-IOS/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"";
 				PRODUCT_BUNDLE_IDENTIFIER = "videocore.RKB-IOS";
@@ -402,7 +402,7 @@
 					"\"${PODS_ROOT}/Headers/Public/glm\"/**",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/RKB-IOS/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"";
 				PRODUCT_BUNDLE_IDENTIFIER = "videocore.RKB-IOS";

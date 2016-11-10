@@ -38,14 +38,16 @@ class ViewController: UIViewController, VCSessionDelegate {
 
     @IBOutlet weak var previewView: UIView!
 //    @IBOutlet weak var btnConnect: UIButton!
+    @IBOutlet weak var gameIdTXF: UITextField!
 
+    @IBOutlet weak var btnConnect: UIButton!
 
     var uiView: UIView!
     var btnCon: UIButton!
     var gameIDText: UITextField!
     var session: VCSimpleSession?
 
-    var liveData: LiveData = LiveData(wsUrl: "http://tcp.lb.hoopchina.com:3081", gameId: "78")
+    var liveData: LiveData!
 
 
     override func viewDidLoad() {
@@ -56,11 +58,27 @@ class ViewController: UIViewController, VCSessionDelegate {
         initVideoCore()
     }
 
+
+    @IBAction func onTouchSync(_ sender: Any) {
+        liveData = LiveData(wsUrl: "http://tcp.lb.hoopchina.com:3081", gameId: gameIdTXF.text ?? "")
+    }
+
+    @IBAction func onTouchBtnConnect(_ sender: Any) {
+        switch session?.rtmpSessionState {
+        case .none, .previewStarted?, .ended?, .error?:
+            session?.startRtmpSession(withURL: "rtmp://rtmp.icassi.us/live", andStreamKey: "test1")
+
+        default:
+            session?.endRtmpSession()
+            break
+        }
+    }
+
     func initUI() {
         self.uiView = UIView(frame: CGRect(x: 0, y: 0, width: 500, height: 100))
         uiView.backgroundColor = UIColor.gray;
         uiView.alpha = 0.7
-        self.view.addSubview(uiView)
+//        self.view.addSubview(uiView)
 
         let gameIdLabel = UILabel(frame: CGRect(x: 10, y: 5, width: 100, height: 50))
         gameIdLabel.text = "Game ID:"
@@ -92,14 +110,14 @@ class ViewController: UIViewController, VCSessionDelegate {
     }
 
     func onBtnConTap(sender: Any) {
-        switch session?.rtmpSessionState {
-        case .none, .previewStarted?, .ended?, .error?:
-            session?.startRtmpSession(withURL: "rtmp://rtmp.icassi.us/live", andStreamKey: "test1")
-
-        default:
-            session?.endRtmpSession()
-            break
-        }
+//        switch session?.rtmpSessionState {
+//        case .none, .previewStarted?, .ended?, .error?:
+//            session?.startRtmpSession(withURL: "rtmp://rtmp.icassi.us/live", andStreamKey: "test1")
+//
+//        default:
+//            session?.endRtmpSession()
+//            break
+//        }
     }
 
     func onSwipeDown(recognizer: UISwipeGestureRecognizer) {
@@ -143,16 +161,15 @@ class ViewController: UIViewController, VCSessionDelegate {
     func connectionStatusChanged(_ sessionState: VCSessionState) {
         switch session!.rtmpSessionState {
         case .starting:
-            btnCon.setTitle("链接中...", for: UIControlState())
+            btnConnect.setTitle("链接中...", for: UIControlState())
 
         case .started:
-            btnCon.setTitle("断开链接", for: UIControlState())
+            btnConnect.setTitle("断开链接", for: UIControlState())
 
         default:
-            btnCon.setTitle("开始推流", for: UIControlState())
+            btnConnect.setTitle("开始推流", for: UIControlState())
         }
     }
-
 
     @IBAction func btnFilterTouch(_ sender: AnyObject) {
         switch self.session!.filter {
