@@ -79,7 +79,6 @@ class ViewController: UIViewController, VCSessionDelegate {
         btnCon.setTitle("开始推流", for: UIControlState.normal)
         btnCon.backgroundColor = UIColor.blue
         btnCon.addTarget(self, action: #selector(onBtnConTap), for: UIControlEvents.touchUpInside)
-//        btnCon.contentHorizontalAlignment
         uiView.addSubview(btnCon)
 
         //
@@ -95,7 +94,7 @@ class ViewController: UIViewController, VCSessionDelegate {
     func onBtnConTap(sender: Any) {
         switch session?.rtmpSessionState {
         case .none, .previewStarted?, .ended?, .error?:
-            session?.startRtmpSession(withURL: "rtmp://rtmp.icassi.us/live", andStreamKey: "test")
+            session?.startRtmpSession(withURL: "rtmp://rtmp.icassi.us/live", andStreamKey: "test1")
 
         default:
             session?.endRtmpSession()
@@ -140,16 +139,6 @@ class ViewController: UIViewController, VCSessionDelegate {
         session?.delegate = nil;
     }
 
-//    @IBAction func btnConnectTouch(_ sender: AnyObject) {
-////        switch session?.rtmpSessionState {
-////        case .none, .previewStarted?, .ended?, .error?:
-////            session?.startRtmpSession(withURL: "rtmp://rtmp.icassi.us/live", andStreamKey: "test")
-////
-////        default:
-////            session?.endRtmpSession()
-////            break
-////        }
-//    }
 
     func connectionStatusChanged(_ sessionState: VCSessionState) {
         switch session!.rtmpSessionState {
