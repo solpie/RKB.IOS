@@ -174,7 +174,7 @@ class LiveData {
             let image2 = UIGraphicsGetImageFromCurrentImageContext();
             UIGraphicsEndImageContext();
             
-            let rect = CGRect(x:300, y:600, width:512, height:512);
+            let rect = CGRect(x:336, y:910, width:512, height:512);
             self.session?.addPixelBufferSource(image2, with: rect)
         }
     }

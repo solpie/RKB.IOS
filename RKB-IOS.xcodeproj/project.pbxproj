@@ -24,7 +24,7 @@
 		2A6111A77B2C2074CA9709D4 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3079384F1C0F540F0034CC99 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		307938511C0F54170034CC99 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
-		6C157D2B1AD9735A00C7FAD3 /* RKB-IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RKB-IOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C157D2B1AD9735A00C7FAD3 /* RKB-IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "RKB-IOS.app"; path = "RKB LiveData.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C157D2F1AD9735A00C7FAD3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C157D301AD9735A00C7FAD3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6C157D321AD9735A00C7FAD3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -375,7 +375,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"";
 				PRODUCT_BUNDLE_IDENTIFIER = "videocore.RKB-IOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "RKB LiveData";
 				SWIFT_OBJC_BRIDGING_HEADER = "RKB-IOS/VideoCore-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
@@ -406,7 +406,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"";
 				PRODUCT_BUNDLE_IDENTIFIER = "videocore.RKB-IOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = "RKB LiveData";
 				SWIFT_OBJC_BRIDGING_HEADER = "RKB-IOS/VideoCore-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};

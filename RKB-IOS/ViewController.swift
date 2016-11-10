@@ -37,7 +37,7 @@ import VideoCore
 class ViewController: UIViewController, VCSessionDelegate {
 
     @IBOutlet weak var previewView: UIView!
-    @IBOutlet weak var btnConnect: UIButton!
+//    @IBOutlet weak var btnConnect: UIButton!
 
 
     var uiView: UIView!
@@ -65,7 +65,6 @@ class ViewController: UIViewController, VCSessionDelegate {
         let gameIdLabel = UILabel(frame: CGRect(x: 10, y: 5, width: 100, height: 50))
         gameIdLabel.text = "Game ID:"
         gameIdLabel.textColor = UIColor.red
-//        gameIdLabel.backgroundColor = UIColor.white
         self.uiView.addSubview(gameIdLabel)
 
 
@@ -79,7 +78,6 @@ class ViewController: UIViewController, VCSessionDelegate {
         self.btnCon = UIButton(frame: CGRect(x: 150, y: 40, width: 120, height: 40))
         btnCon.setTitle("开始推流", for: UIControlState.normal)
         btnCon.backgroundColor = UIColor.blue
-//        self.btnCon.
         btnCon.addTarget(self, action: #selector(onBtnConTap), for: UIControlEvents.touchUpInside)
 //        btnCon.contentHorizontalAlignment
         uiView.addSubview(btnCon)
@@ -138,34 +136,30 @@ class ViewController: UIViewController, VCSessionDelegate {
 
     deinit {
         btnCon = nil
-        btnConnect = nil
         previewView = nil
         session?.delegate = nil;
     }
 
-    @IBAction func btnConnectTouch(_ sender: AnyObject) {
-//        switch session?.rtmpSessionState {
-//        case .none, .previewStarted?, .ended?, .error?:
-//            session?.startRtmpSession(withURL: "rtmp://rtmp.icassi.us/live", andStreamKey: "test")
-//
-//        default:
-//            session?.endRtmpSession()
-//            break
-//        }
-    }
+//    @IBAction func btnConnectTouch(_ sender: AnyObject) {
+////        switch session?.rtmpSessionState {
+////        case .none, .previewStarted?, .ended?, .error?:
+////            session?.startRtmpSession(withURL: "rtmp://rtmp.icassi.us/live", andStreamKey: "test")
+////
+////        default:
+////            session?.endRtmpSession()
+////            break
+////        }
+//    }
 
     func connectionStatusChanged(_ sessionState: VCSessionState) {
         switch session!.rtmpSessionState {
         case .starting:
-            btnConnect.setTitle("链接中...", for: UIControlState())
             btnCon.setTitle("链接中...", for: UIControlState())
 
         case .started:
-            btnConnect.setTitle("断开链接", for: UIControlState())
             btnCon.setTitle("断开链接", for: UIControlState())
 
         default:
-            btnConnect.setTitle("开始推流", for: UIControlState())
             btnCon.setTitle("开始推流", for: UIControlState())
         }
     }

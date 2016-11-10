@@ -12,7 +12,7 @@
         <!--View Controller-->
         <scene sceneID="ufC-wZ-h7g">
             <objects>
-                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="SampleBroadcaster_Swift" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="vXZ-lx-hvc" customClass="ViewController" customModule="RKB_IOS" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jyV-Pf-zRb"/>
                         <viewControllerLayoutGuide type="bottom" id="2fi-mo-0CV"/>
@@ -22,44 +22,18 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l9C-zN-svY">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="580"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LtG-lf-Rbt">
-                                <rect key="frame" x="117" y="612" width="140" height="35"/>
-                                <color key="backgroundColor" red="0.38999998569488525" green="0.38999998569488525" blue="0.38999998569488525" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="140" id="W2M-lz-wMm"/>
-                                </constraints>
-                                <state key="normal" title="Connect">
-                                    <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="btnConnectTouch:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="lvs-Ku-gNe"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9Oe-j4-7rs">
-                                <rect key="frame" x="320" y="615" width="35" height="30"/>
-                                <state key="normal" title="Filter"/>
-                                <connections>
-                                    <action selector="btnFilterTouch:" destination="vXZ-lx-hvc" eventType="touchUpInside" id="5NL-7b-Xzs"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstAttribute="bottom" secondItem="LtG-lf-Rbt" secondAttribute="bottom" constant="20" symbolic="YES" id="1G1-4I-AkI"/>
-                            <constraint firstItem="LtG-lf-Rbt" firstAttribute="top" secondItem="l9C-zN-svY" secondAttribute="bottom" constant="32" id="64h-a4-6mk"/>
                             <constraint firstAttribute="trailing" secondItem="l9C-zN-svY" secondAttribute="trailing" id="ANy-Mm-pTj"/>
-                            <constraint firstAttribute="trailing" secondItem="9Oe-j4-7rs" secondAttribute="trailing" constant="20" id="RPl-e1-ers"/>
-                            <constraint firstAttribute="bottom" secondItem="l9C-zN-svY" secondAttribute="bottom" constant="87" id="ahb-Ud-0uJ"/>
-                            <constraint firstItem="LtG-lf-Rbt" firstAttribute="centerX" secondItem="l9C-zN-svY" secondAttribute="centerX" id="cX4-Ve-mFQ"/>
-                            <constraint firstItem="2fi-mo-0CV" firstAttribute="top" secondItem="9Oe-j4-7rs" secondAttribute="bottom" constant="22" id="miB-EZ-t8s"/>
+                            <constraint firstAttribute="bottom" secondItem="l9C-zN-svY" secondAttribute="bottom" id="ahb-Ud-0uJ"/>
                             <constraint firstItem="l9C-zN-svY" firstAttribute="leading" secondItem="kh9-bI-dsS" secondAttribute="leading" id="n4J-V6-gBA"/>
                             <constraint firstItem="l9C-zN-svY" firstAttribute="top" secondItem="kh9-bI-dsS" secondAttribute="top" id="w5m-YH-LLu"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="btnConnect" destination="LtG-lf-Rbt" id="pDg-sl-tIh"/>
                         <outlet property="previewView" destination="l9C-zN-svY" id="HH2-bj-chh"/>
                     </connections>
                 </viewController>
