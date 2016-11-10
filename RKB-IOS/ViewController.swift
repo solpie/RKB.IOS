@@ -25,8 +25,21 @@ class ViewController: UIViewController, VCSessionDelegate {
         // Do any additional setup after loading the view, typically from a nib.
         initVideoCore()
     }
-
-
+//    override func viewDidAppear(animated: Bool) {
+//        super.viewDidAppear(animated)
+////        UIView.animate(withDuration:0.7, delay: 1.0, options: .curveEaseOut, animations: {
+////            var basketTopFrame = self.panelView.frame
+////            basketTopFrame.origin.y -= 100
+////
+//////            var basketBottomFrame = self.basketBottom.frame
+//////            basketBottomFrame.origin.y += basketBottomFrame.size.height
+////
+////            self.panelView.frame = basketTopFrame
+//////            self.basketBottom.frame = basketBottomFrame
+////        }, completion: { finished in
+////            print("Basket doors opened!")
+////        })
+//    }
     @IBAction func onTouchSync(_ sender: Any) {
         liveData = LiveData(wsUrl: "http://tcp.lb.hoopchina.com:3081", gameId: gameIdTXF.text ?? "")
         self.liveData.session = session
@@ -42,9 +55,9 @@ class ViewController: UIViewController, VCSessionDelegate {
 
     override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
 
-        if motion == .motionShake{
+        if motion == .motionShake {
             print("shake!")
-                        UIControl().sendAction(Selector("suspend"), to: UIApplication.shared, for: nil)
+            UIControl().sendAction(Selector("suspend"), to: UIApplication.shared, for: nil)
 
         }
 //        if motion == .motionShake && randomNumber == SHAKE
@@ -124,13 +137,28 @@ class ViewController: UIViewController, VCSessionDelegate {
     func onSwipeDown(recognizer: UISwipeGestureRecognizer) {
         print("swipe down")
 
-        self.panelView.isHidden = false
-
+        UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseOut, animations: {
+            var basketTopFrame = self.panelView.frame
+            basketTopFrame.origin.y += 120
+            self.panelView.frame = basketTopFrame
+        }, completion: {
+            finished in
+            self.panelView.isHidden = false
+        })
     }
 
     func onSwipe(recognizer: UISwipeGestureRecognizer) {
         print("swipe up")
-        self.panelView.isHidden = true
+
+        UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseOut, animations: {
+            var basketTopFrame = self.panelView.frame
+            basketTopFrame.origin.y -= 120
+            self.panelView.frame = basketTopFrame
+        }, completion: {
+            finished in
+            self.panelView.isHidden = true
+        })
+//        self.panelView.isHidden = true
 
 //        let point = recognizer.locationInView(self.view)
         //这个点是滑动的起点
@@ -143,7 +171,6 @@ class ViewController: UIViewController, VCSessionDelegate {
         previewView.addSubview(session!.previewView)
         session!.previewView.frame = previewView.bounds
         session!.delegate = self
-
     }
 
     override func didReceiveMemoryWarning() {
