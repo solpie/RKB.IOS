@@ -10,6 +10,8 @@ class ViewController: UIViewController, VCSessionDelegate {
 
     @IBOutlet weak var btnConnect: UIButton!
 
+
+    var isPanelViewMoving:Bool = false
 //    var uiView: UIView!
 //    var btnCon: UIButton!
 //    var gameIDText: UITextField!
@@ -100,30 +102,6 @@ class ViewController: UIViewController, VCSessionDelegate {
     }
 
     func initUI() {
-//        self.uiView = UIView(frame: CGRect(x: 0, y: 0, width: 500, height: 100))
-//        uiView.backgroundColor = UIColor.gray;
-//        uiView.alpha = 0.7
-////        self.view.addSubview(uiView)
-//
-//        let gameIdLabel = UILabel(frame: CGRect(x: 10, y: 5, width: 100, height: 50))
-//        gameIdLabel.text = "Game ID:"
-//        gameIdLabel.textColor = UIColor.red
-//        self.uiView.addSubview(gameIdLabel)
-//
-//
-//        let txf = UITextField(frame: CGRect(x: 80, y: 5, width: 70, height: 40))
-//        self.gameIDText = txf
-//        txf.backgroundColor = UIColor(white: 1, alpha: 0.5)
-//        txf.textColor = UIColor.white
-//        txf.isUserInteractionEnabled = true
-//        uiView.addSubview(txf)
-//
-//        self.btnCon = UIButton(frame: CGRect(x: 150, y: 40, width: 120, height: 40))
-//        btnCon.setTitle("开始推流", for: UIControlState.normal)
-//        btnCon.backgroundColor = UIColor.blue
-//        btnCon.addTarget(self, action: #selector(onBtnConTap), for: UIControlEvents.touchUpInside)
-//        uiView.addSubview(btnCon)
-
         //
         let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(onSwipe))
         swipeUp.direction = UISwipeGestureRecognizerDirection.up
@@ -136,29 +114,35 @@ class ViewController: UIViewController, VCSessionDelegate {
 
     func onSwipeDown(recognizer: UISwipeGestureRecognizer) {
         print("swipe down")
-
-        UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseOut, animations: {
-            var basketTopFrame = self.panelView.frame
-            basketTopFrame.origin.y += 120
-            self.panelView.frame = basketTopFrame
-        }, completion: {
-            finished in
+        if panelView.isHidden && !isPanelViewMoving{
+            isPanelViewMoving = true
             self.panelView.isHidden = false
-        })
+            UIView.animate(withDuration: 0.2, delay: 0.0, options: .curveEaseOut, animations: {
+                var basketTopFrame = self.panelView.frame
+                basketTopFrame.origin.y += 120
+                self.panelView.frame = basketTopFrame
+            }, completion: {
+                finished in
+                self.isPanelViewMoving = false
+            })
+        }
+
     }
 
     func onSwipe(recognizer: UISwipeGestureRecognizer) {
         print("swipe up")
-
-        UIView.animate(withDuration: 0.3, delay: 0.0, options: .curveEaseOut, animations: {
-            var basketTopFrame = self.panelView.frame
-            basketTopFrame.origin.y -= 120
-            self.panelView.frame = basketTopFrame
-        }, completion: {
-            finished in
-            self.panelView.isHidden = true
-        })
-//        self.panelView.isHidden = true
+        if !panelView.isHidden && !isPanelViewMoving{
+            isPanelViewMoving = true
+            UIView.animate(withDuration: 0.2, delay: 0.0, options: .curveEaseOut, animations: {
+                var basketTopFrame = self.panelView.frame
+                basketTopFrame.origin.y -= 120
+                self.panelView.frame = basketTopFrame
+            }, completion: {
+                finished in
+                self.isPanelViewMoving = false
+                self.panelView.isHidden = true
+            })
+        }
 
 //        let point = recognizer.locationInView(self.view)
         //这个点是滑动的起点
