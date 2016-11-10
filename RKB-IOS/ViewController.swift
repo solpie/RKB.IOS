@@ -1,36 +1,3 @@
-/*
-
- Video Core
- Copyright (c) 2014 James G. Hurley
-
- Permission is hereby granted, free of charge, to any person obtaining a copy
- of this software and associated documentation files (the "Software"), to deal
- in the Software without restriction, including without limitation the rights
- to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the Software is
- furnished to do so, subject to the following conditions:
-
- The above copyright notice and this permission notice shall be included in
- all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
- THE SOFTWARE.
-
- */
-
-//
-//  ViewController.swift
-//  SampleBroadcaster-Swift
-//
-//  Created by Josh Lieberman on 4/11/15.
-//  Copyright (c) 2015 videocore. All rights reserved.
-//
-
 import UIKit
 import VideoCore
 
@@ -38,13 +5,14 @@ class ViewController: UIViewController, VCSessionDelegate {
 
     @IBOutlet weak var previewView: UIView!
 //    @IBOutlet weak var btnConnect: UIButton!
+    @IBOutlet weak var panelView: UIView!
     @IBOutlet weak var gameIdTXF: UITextField!
 
     @IBOutlet weak var btnConnect: UIButton!
 
-    var uiView: UIView!
-    var btnCon: UIButton!
-    var gameIDText: UITextField!
+//    var uiView: UIView!
+//    var btnCon: UIButton!
+//    var gameIDText: UITextField!
     var session: VCSimpleSession?
 
     var liveData: LiveData!
@@ -61,7 +29,51 @@ class ViewController: UIViewController, VCSessionDelegate {
 
     @IBAction func onTouchSync(_ sender: Any) {
         liveData = LiveData(wsUrl: "http://tcp.lb.hoopchina.com:3081", gameId: gameIdTXF.text ?? "")
+        self.liveData.session = session
+//
+        view.endEditing(true);
+
+
+//
     }
+    override var canBecomeFirstResponder: Bool {
+        return true
+    }
+
+    override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
+
+        if motion == .motionShake{
+            print("shake!")
+                        UIControl().sendAction(Selector("suspend"), to: UIApplication.shared, for: nil)
+
+        }
+//        if motion == .motionShake && randomNumber == SHAKE
+//        {
+//            debugPrint("SHAKE RECEIVED")
+//            correctActionPerformed = true
+//        }
+//        else if motion == .motionShake && randomNumber != SHAKE
+//        {
+//            debugPrint("WRONG ACTION")
+//            wrongActionPerformed = true
+//        }
+//        else
+//        {
+//            debugPrint("WRONG ACTION")
+//            wrongActionPerformed = true
+//        }
+    }
+//    override func motionEnded(motion: UIEventSubtype,
+//                              withEvent event: UIEvent?) {
+//
+//        if motion == .MotionShake {
+//
+//            //Comment: to terminate app, do not use exit(0) bc that is logged as a crash.
+//            UIControl().sendAction(#selector(NSURLSessionTask.suspend), to: UIApplication.sharedApplication(), forEvent: nil)
+//
+//            UIControl().sendAction(Selector("suspend"), to: UIApplication.sharedApplication(), forEvent: nil)
+//        }
+//    }
 
     @IBAction func onTouchBtnConnect(_ sender: Any) {
         switch session?.rtmpSessionState {
@@ -75,29 +87,29 @@ class ViewController: UIViewController, VCSessionDelegate {
     }
 
     func initUI() {
-        self.uiView = UIView(frame: CGRect(x: 0, y: 0, width: 500, height: 100))
-        uiView.backgroundColor = UIColor.gray;
-        uiView.alpha = 0.7
-//        self.view.addSubview(uiView)
-
-        let gameIdLabel = UILabel(frame: CGRect(x: 10, y: 5, width: 100, height: 50))
-        gameIdLabel.text = "Game ID:"
-        gameIdLabel.textColor = UIColor.red
-        self.uiView.addSubview(gameIdLabel)
-
-
-        let txf = UITextField(frame: CGRect(x: 80, y: 5, width: 70, height: 40))
-        self.gameIDText = txf
-        txf.backgroundColor = UIColor(white: 1, alpha: 0.5)
-        txf.textColor = UIColor.white
-        txf.isUserInteractionEnabled = true
-        uiView.addSubview(txf)
-
-        self.btnCon = UIButton(frame: CGRect(x: 150, y: 40, width: 120, height: 40))
-        btnCon.setTitle("开始推流", for: UIControlState.normal)
-        btnCon.backgroundColor = UIColor.blue
-        btnCon.addTarget(self, action: #selector(onBtnConTap), for: UIControlEvents.touchUpInside)
-        uiView.addSubview(btnCon)
+//        self.uiView = UIView(frame: CGRect(x: 0, y: 0, width: 500, height: 100))
+//        uiView.backgroundColor = UIColor.gray;
+//        uiView.alpha = 0.7
+////        self.view.addSubview(uiView)
+//
+//        let gameIdLabel = UILabel(frame: CGRect(x: 10, y: 5, width: 100, height: 50))
+//        gameIdLabel.text = "Game ID:"
+//        gameIdLabel.textColor = UIColor.red
+//        self.uiView.addSubview(gameIdLabel)
+//
+//
+//        let txf = UITextField(frame: CGRect(x: 80, y: 5, width: 70, height: 40))
+//        self.gameIDText = txf
+//        txf.backgroundColor = UIColor(white: 1, alpha: 0.5)
+//        txf.textColor = UIColor.white
+//        txf.isUserInteractionEnabled = true
+//        uiView.addSubview(txf)
+//
+//        self.btnCon = UIButton(frame: CGRect(x: 150, y: 40, width: 120, height: 40))
+//        btnCon.setTitle("开始推流", for: UIControlState.normal)
+//        btnCon.backgroundColor = UIColor.blue
+//        btnCon.addTarget(self, action: #selector(onBtnConTap), for: UIControlEvents.touchUpInside)
+//        uiView.addSubview(btnCon)
 
         //
         let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(onSwipe))
@@ -109,27 +121,16 @@ class ViewController: UIViewController, VCSessionDelegate {
         view.addGestureRecognizer(swipeDown)
     }
 
-    func onBtnConTap(sender: Any) {
-//        switch session?.rtmpSessionState {
-//        case .none, .previewStarted?, .ended?, .error?:
-//            session?.startRtmpSession(withURL: "rtmp://rtmp.icassi.us/live", andStreamKey: "test1")
-//
-//        default:
-//            session?.endRtmpSession()
-//            break
-//        }
-    }
-
     func onSwipeDown(recognizer: UISwipeGestureRecognizer) {
         print("swipe down")
 
-        self.uiView.isHidden = false
+        self.panelView.isHidden = false
 
     }
 
     func onSwipe(recognizer: UISwipeGestureRecognizer) {
         print("swipe up")
-        self.uiView.isHidden = true
+        self.panelView.isHidden = true
 
 //        let point = recognizer.locationInView(self.view)
         //这个点是滑动的起点
@@ -143,7 +144,6 @@ class ViewController: UIViewController, VCSessionDelegate {
         session!.previewView.frame = previewView.bounds
         session!.delegate = self
 
-        self.liveData.session = session
     }
 
     override func didReceiveMemoryWarning() {
@@ -152,7 +152,6 @@ class ViewController: UIViewController, VCSessionDelegate {
     }
 
     deinit {
-        btnCon = nil
         previewView = nil
         session?.delegate = nil;
     }

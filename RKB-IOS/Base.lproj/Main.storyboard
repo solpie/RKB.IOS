@@ -105,6 +105,7 @@
                     <connections>
                         <outlet property="btnConnect" destination="muJ-U4-fJg" id="2YT-Im-wdy"/>
                         <outlet property="gameIdTXF" destination="Gga-Th-YMi" id="C0A-8y-CHL"/>
+                        <outlet property="panelView" destination="OGx-w2-0HQ" id="Gsa-95-S3r"/>
                         <outlet property="previewView" destination="l9C-zN-svY" id="HH2-bj-chh"/>
                     </connections>
                 </viewController>
