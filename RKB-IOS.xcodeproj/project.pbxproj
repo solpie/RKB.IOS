@@ -1,0 +1,439 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		307938501C0F540F0034CC99 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3079384F1C0F540F0034CC99 /* AVFoundation.framework */; };
+		307938521C0F54170034CC99 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 307938511C0F54170034CC99 /* CoreGraphics.framework */; };
+		6C157D311AD9735A00C7FAD3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C157D301AD9735A00C7FAD3 /* AppDelegate.swift */; };
+		6C157D331AD9735A00C7FAD3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C157D321AD9735A00C7FAD3 /* ViewController.swift */; };
+		6C157D361AD9735A00C7FAD3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C157D341AD9735A00C7FAD3 /* Main.storyboard */; };
+		6C157D381AD9735A00C7FAD3 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6C157D371AD9735A00C7FAD3 /* Images.xcassets */; };
+		6C157D3B1AD9735A00C7FAD3 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6C157D391AD9735A00C7FAD3 /* LaunchScreen.xib */; };
+		8E0792B41DD3241F006ED30B /* LiveData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E0792B31DD3241F006ED30B /* LiveData.swift */; };
+		F34B93A213F10F35690D89F3 /* Pods_RKB_IOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 83CCDC05C4DAB84E85D39B46 /* Pods_RKB_IOS.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		12CD3B929E876BF9E59938E8 /* Pods-RKB-IOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RKB-IOS.release.xcconfig"; path = "Pods/Target Support Files/Pods-RKB-IOS/Pods-RKB-IOS.release.xcconfig"; sourceTree = "<group>"; };
+		186C93E54D37FAD901EF77F5 /* Pods-RKB-IOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RKB-IOS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RKB-IOS/Pods-RKB-IOS.debug.xcconfig"; sourceTree = "<group>"; };
+		2A6111A77B2C2074CA9709D4 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3079384F1C0F540F0034CC99 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		307938511C0F54170034CC99 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		6C157D2B1AD9735A00C7FAD3 /* RKB-IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RKB-IOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		6C157D2F1AD9735A00C7FAD3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		6C157D301AD9735A00C7FAD3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		6C157D321AD9735A00C7FAD3 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		6C157D351AD9735A00C7FAD3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		6C157D371AD9735A00C7FAD3 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		6C157D3A1AD9735A00C7FAD3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		6C157D501AD9A24900C7FAD3 /* VideoCore-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VideoCore-Bridging-Header.h"; sourceTree = "<group>"; };
+		83CCDC05C4DAB84E85D39B46 /* Pods_RKB_IOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RKB_IOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8E0792B31DD3241F006ED30B /* LiveData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LiveData.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		6C157D281AD9735A00C7FAD3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				307938521C0F54170034CC99 /* CoreGraphics.framework in Frameworks */,
+				307938501C0F540F0034CC99 /* AVFoundation.framework in Frameworks */,
+				F34B93A213F10F35690D89F3 /* Pods_RKB_IOS.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		615B46DAC80DA81227178407 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				186C93E54D37FAD901EF77F5 /* Pods-RKB-IOS.debug.xcconfig */,
+				12CD3B929E876BF9E59938E8 /* Pods-RKB-IOS.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		6C157D221AD9735A00C7FAD3 = {
+			isa = PBXGroup;
+			children = (
+				6C157D2D1AD9735A00C7FAD3 /* RKB-IOS */,
+				6C157D2C1AD9735A00C7FAD3 /* Products */,
+				7569E797EB7C5A42BF24521D /* Frameworks */,
+				615B46DAC80DA81227178407 /* Pods */,
+			);
+			sourceTree = "<group>";
+		};
+		6C157D2C1AD9735A00C7FAD3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6C157D2B1AD9735A00C7FAD3 /* RKB-IOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6C157D2D1AD9735A00C7FAD3 /* RKB-IOS */ = {
+			isa = PBXGroup;
+			children = (
+				6C157D301AD9735A00C7FAD3 /* AppDelegate.swift */,
+				6C157D321AD9735A00C7FAD3 /* ViewController.swift */,
+				8E0792B31DD3241F006ED30B /* LiveData.swift */,
+				6C157D341AD9735A00C7FAD3 /* Main.storyboard */,
+				6C157D371AD9735A00C7FAD3 /* Images.xcassets */,
+				6C157D391AD9735A00C7FAD3 /* LaunchScreen.xib */,
+				6C157D2E1AD9735A00C7FAD3 /* Supporting Files */,
+				6C157D501AD9A24900C7FAD3 /* VideoCore-Bridging-Header.h */,
+			);
+			path = "RKB-IOS";
+			sourceTree = "<group>";
+		};
+		6C157D2E1AD9735A00C7FAD3 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				6C157D2F1AD9735A00C7FAD3 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		7569E797EB7C5A42BF24521D /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				307938511C0F54170034CC99 /* CoreGraphics.framework */,
+				3079384F1C0F540F0034CC99 /* AVFoundation.framework */,
+				2A6111A77B2C2074CA9709D4 /* Pods.framework */,
+				83CCDC05C4DAB84E85D39B46 /* Pods_RKB_IOS.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		6C157D2A1AD9735A00C7FAD3 /* RKB-IOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6C157D4A1AD9735A00C7FAD3 /* Build configuration list for PBXNativeTarget "RKB-IOS" */;
+			buildPhases = (
+				A2C0AA06C94B8C71FFE3EA5C /* [CP] Check Pods Manifest.lock */,
+				6C157D271AD9735A00C7FAD3 /* Sources */,
+				6C157D281AD9735A00C7FAD3 /* Frameworks */,
+				6C157D291AD9735A00C7FAD3 /* Resources */,
+				398BFAE09D9DA44B022A1D0B /* [CP] Embed Pods Frameworks */,
+				890A4F3B5311A53552DF32C0 /* [CP] Copy Pods Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "RKB-IOS";
+			productName = "SampleBroadcaster-Swift";
+			productReference = 6C157D2B1AD9735A00C7FAD3 /* RKB-IOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		6C157D231AD9735A00C7FAD3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0810;
+				ORGANIZATIONNAME = videocore;
+				TargetAttributes = {
+					6C157D2A1AD9735A00C7FAD3 = {
+						CreatedOnToolsVersion = 6.3;
+						DevelopmentTeam = 6DCPUUBVG9;
+						LastSwiftMigration = 0810;
+					};
+				};
+			};
+			buildConfigurationList = 6C157D261AD9735A00C7FAD3 /* Build configuration list for PBXProject "RKB-IOS" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 6C157D221AD9735A00C7FAD3;
+			productRefGroup = 6C157D2C1AD9735A00C7FAD3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				6C157D2A1AD9735A00C7FAD3 /* RKB-IOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		6C157D291AD9735A00C7FAD3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C157D361AD9735A00C7FAD3 /* Main.storyboard in Resources */,
+				6C157D3B1AD9735A00C7FAD3 /* LaunchScreen.xib in Resources */,
+				6C157D381AD9735A00C7FAD3 /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		398BFAE09D9DA44B022A1D0B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RKB-IOS/Pods-RKB-IOS-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		890A4F3B5311A53552DF32C0 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-RKB-IOS/Pods-RKB-IOS-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A2C0AA06C94B8C71FFE3EA5C /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		6C157D271AD9735A00C7FAD3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6C157D331AD9735A00C7FAD3 /* ViewController.swift in Sources */,
+				6C157D311AD9735A00C7FAD3 /* AppDelegate.swift in Sources */,
+				8E0792B41DD3241F006ED30B /* LiveData.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		6C157D341AD9735A00C7FAD3 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6C157D351AD9735A00C7FAD3 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		6C157D391AD9735A00C7FAD3 /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				6C157D3A1AD9735A00C7FAD3 /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		6C157D481AD9735A00C7FAD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		6C157D491AD9735A00C7FAD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		6C157D4B1AD9735A00C7FAD3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 186C93E54D37FAD901EF77F5 /* Pods-RKB-IOS.debug.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 6DCPUUBVG9;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
+				HEADER_SEARCH_PATHS = (
+					"${PODS_ROOT}/boost",
+					"\"${PODS_ROOT}/boost\"",
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"/**",
+					"\"${PODS_ROOT}/Headers/Public/boost\"/**",
+					"\"${PODS_ROOT}/Headers/Public/glm\"/**",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/RKB-IOS/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"";
+				PRODUCT_BUNDLE_IDENTIFIER = "videocore.RKB-IOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "RKB-IOS/VideoCore-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		6C157D4C1AD9735A00C7FAD3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 12CD3B929E876BF9E59938E8 /* Pods-RKB-IOS.release.xcconfig */;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 6DCPUUBVG9;
+				ENABLE_BITCODE = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/build/Debug-iphoneos",
+				);
+				HEADER_SEARCH_PATHS = (
+					"${PODS_ROOT}/boost",
+					"\"${PODS_ROOT}/boost\"",
+					"$(inherited)",
+					"\"${PODS_ROOT}/Headers/Public\"/**",
+					"\"${PODS_ROOT}/Headers/Public/boost\"/**",
+					"\"${PODS_ROOT}/Headers/Public/glm\"/**",
+				);
+				INFOPLIST_FILE = "$(SRCROOT)/RKB-IOS/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "$(inherited) \"-D\" \"COCOAPODS\"";
+				PRODUCT_BUNDLE_IDENTIFIER = "videocore.RKB-IOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "RKB-IOS/VideoCore-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		6C157D261AD9735A00C7FAD3 /* Build configuration list for PBXProject "RKB-IOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6C157D481AD9735A00C7FAD3 /* Debug */,
+				6C157D491AD9735A00C7FAD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		6C157D4A1AD9735A00C7FAD3 /* Build configuration list for PBXNativeTarget "RKB-IOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6C157D4B1AD9735A00C7FAD3 /* Debug */,
+				6C157D4C1AD9735A00C7FAD3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6C157D231AD9735A00C7FAD3 /* Project object */;
+}
