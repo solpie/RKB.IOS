@@ -12,6 +12,13 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
 
     @IBOutlet weak var btnConnect: UIButton!
 
+    @IBOutlet weak var scoreView: UIView!
+
+//    @IBOutlet weak var gameInfo: UITextField!
+//    @IBOutlet weak var leftInfo: UILabel!
+
+//    @IBOutlet weak var leftInfo: UITextView!
+    @IBOutlet weak var gameInfo: UILabel!
 
     var isPanelViewMoving: Bool = false
     var session: VCSimpleSession?
@@ -30,44 +37,7 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
 
     }
     ///scan
-    func failed() {
-        let ac = UIAlertController(title: "Scanning not supported", message: "Your device does not support scanning a code from an item. Please use a device with a camera.", preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "OK", style: .default))
-        present(ac, animated: true)
-        captureSession = nil
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-
-        if (captureSession?.isRunning == false) {
-            captureSession.startRunning();
-        }
-    }
-
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-
-        if (captureSession?.isRunning == true) {
-            captureSession.stopRunning();
-        }
-    }
-
-    func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
-        captureSession.stopRunning()
-
-        if let metadataObject = metadataObjects.first {
-            let readableObject = metadataObject as! AVMetadataMachineReadableCodeObject;
-
-            AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
-            found(code: readableObject.stringValue);
-        }
-
-        dismiss(animated: true)
-    }
-
     func found(code: String) {
-        NSLog("scaned qrcode: \(code)")
 //        {"rtmp":"rtmp://rtmp.icassi.us/live/test1","gameId":"78"}
         if let dataFromString = code.data(using: .utf8, allowLossyConversion: false) {
             let json = JSON(data: dataFromString)
@@ -80,17 +50,9 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
                 gameIdTXF.text = gameId
             }
         }
-//        view.addSubview(session!.previewView)
         print(code)
     }
 
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
-
-    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .landscapeLeft
-    }
 //////////////////////scan
     @IBAction func onTouchScan(_ sender: Any) {
         view.backgroundColor = UIColor.black
@@ -107,54 +69,30 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
         }
         let feature = features?[0] as! CIQRCodeFeature
         found(code: feature.messageString!)
-        
-        
-//        captureSession = AVCaptureSession()
-//
-//        let videoCaptureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
-//        let videoInput: AVCaptureDeviceInput
-//
-//        do {
-//            videoInput = try AVCaptureDeviceInput(device: videoCaptureDevice)
-//        } catch {
-//            return
-//        }
-//
-//        if (captureSession.canAddInput(videoInput)) {
-//            captureSession.addInput(videoInput)
-//        } else {
-//            failed();
-//            return;
-//        }
-//
-//        let metadataOutput = AVCaptureMetadataOutput()
-//
-//        if (captureSession.canAddOutput(metadataOutput)) {
-//            captureSession.addOutput(metadataOutput)
-//
-//            metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
-//            metadataOutput.metadataObjectTypes = [AVMetadataObjectTypeQRCode]
-//        } else {
-//            failed()
-//            return
-//        }
 
-//        previewLayer = AVCaptureVideoPreviewLayer(session: captureSession);
-//        previewLayer.frame = view.layer.bounds;
-//        previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-//        view.layer.addSublayer(previewLayer);
 
-//        captureSession.startRunning();
     }
 
     @IBAction func onTouchSync(_ sender: Any) {
         liveData = LiveData(wsUrl: "http://tcp.lb.hoopchina.com:3081", gameId: gameIdTXF.text ?? "")
         self.liveData.session = session
+
+        self.liveData.onMsg = self.onMsg
         view.endEditing(true);
+    }
+
+    func onMsg(msg: String) {
+
+        print(msg)
+        gameInfo.text = msg
     }
 
     override var canBecomeFirstResponder: Bool {
         return true
+    }
+
+    @IBAction func onTapView(_ sender: Any) {
+        view.endEditing(true);
     }
 
     override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
@@ -166,18 +104,26 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
     }
 
     @IBAction func onTouchBtnConnect(_ sender: Any) {
-        switch session?.rtmpSessionState {
-        case .none, .previewStarted?, .ended?, .error?:
-            session?.startRtmpSession(withURL: rtmpUrlTXF.text, andStreamKey: "")
 
-        default:
-            session?.endRtmpSession()
-            break
+        if rtmpUrlTXF.text != "" {
+            switch session?.rtmpSessionState {
+            case .none, .previewStarted?, .ended?, .error?:
+                session?.startRtmpSession(withURL: rtmpUrlTXF.text, andStreamKey: "")
+
+            default:
+                session?.endRtmpSession()
+                break
+            }
         }
+
     }
 
 
     func initUI() {
+        let bottomFrame = CGRect(origin: CGPoint(x: 0, y: view.bounds.size.height), size: scoreView.frame.size)
+        scoreView.frame = bottomFrame
+
+//        
         //
         let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(onSwipe))
         swipeUp.direction = UISwipeGestureRecognizerDirection.up
@@ -201,6 +147,16 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
                 finished in
                 self.isPanelViewMoving = false
             })
+
+
+            UIView.animate(withDuration: 0.2, delay: 0.2, options: .curveEaseOut, animations: {
+                var bf = self.scoreView.frame
+                bf.origin.y += 80
+                self.scoreView.frame = bf
+            }, completion: {
+                finished in
+//                self.isPanelViewMoving = false
+            })
         }
 
     }
@@ -217,6 +173,16 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
                 finished in
                 self.isPanelViewMoving = false
                 self.panelView.isHidden = true
+            })
+
+
+            UIView.animate(withDuration: 0.2, delay: 0.2, options: .curveEaseOut, animations: {
+                var bf = self.scoreView.frame
+                bf.origin.y -= 80
+                self.scoreView.frame = bf
+            }, completion: {
+                finished in
+//                self.isPanelViewMoving = false
             })
         }
 

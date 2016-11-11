@@ -22,11 +22,16 @@ class GameData {
     var R_score: Int;
     var R_foul: Int;
 
+    var GameState:String?
+    var LeftNameFull:String
+    var RightNameFull:String
     init(idx: Int,
          leftName: String, leftScore: Int, leftFoul: Int,
          rightName: String, rightScore: Int, rightFoul: Int) {
         self.GameIdx = idx;
 
+        LeftNameFull = leftName
+        RightNameFull = rightName
         var ln = leftName
         if ln.characters.count>5{
             ln = (ln as NSString).substring(to: 5)
@@ -45,7 +50,7 @@ class GameData {
     }
 
     func getDrawText() -> String {
-        return "idx:\(self.GameIdx) state:\n" + "LP:\(self.L_name) S:\(self.L_score) F:\(self.L_foul)\n" + "RP:\(self.R_name) S:\(self.R_score) F:\(self.R_foul)\n";
+        return "第\(self.GameIdx)场 state:\(GameState)\n蓝方:\(LeftNameFull) vs 红方:\(RightNameFull) \n得分:\(self.L_score) 犯规:\(self.L_foul)\t\t得分:\(self.R_score) 犯规:\(self.R_foul)\n";
     }
 
 
@@ -75,6 +80,9 @@ class LiveData {
     var isTimerRunning: Bool = false
 //    var nowDate: Date?
     var srvTime: Double = 0
+
+    var onMsg:((_:String)->Void)!
+
     init(wsUrl: String, gameId: String) {
         print("new LiveData\n")
 //        var ws:SIOSocket;
@@ -133,16 +141,17 @@ class LiveData {
         self.gameData = GameData(idx: data["gameIdx"].intValue,
                 leftName: lp["name"].stringValue, leftScore: lp["leftScore"].intValue, leftFoul: lp["leftFoul"].intValue,
                 rightName: rp["name"].stringValue, rightScore: rp["rightScore"].intValue, rightFoul: rp["rightFoul"].intValue)
-        print(self.gameData?.getDrawText() ?? "");
+//        print(self.gameData?.getDrawText() ?? "");
 //        print("init",self.gameData ?? default value)
 
         self.render()
+        self.onMsg!(self.gameData?.getDrawText() ?? "")
     }
 
 
     func timeStr(sec: Double) -> String {
-        var d = Date(timeIntervalSince1970: sec)
-        var formatter = DateFormatter()
+        let d = Date(timeIntervalSince1970: sec)
+        let formatter = DateFormatter()
         formatter.dateFormat = "HH:mm:ss"
         return formatter.string(from: d)
     }
@@ -173,9 +182,11 @@ class LiveData {
             self.gameData?.R_foul = rf.intValue
         }
 
-        print(self.gameData?.getDrawText() ?? "");
+//        print(self.gameData?.getDrawText() ?? "");
 
         self.render()
+        self.onMsg!(self.gameData?.getDrawText() ?? "")
+
 
     }
 
@@ -199,7 +210,7 @@ class LiveData {
         let fontSize = 20.0
         let font = UIFont(name: "Arial", size: CGFloat(fontSize))
 
-        var s = timeStr(sec: srvTime)
+        let s = timeStr(sec: srvTime)
         (s as NSString).draw(at: CGPoint(x: 0, y: 0), withAttributes: [NSFontAttributeName: font!, NSForegroundColorAttributeName: UIColor.red])
         let img = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
