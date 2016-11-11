@@ -27,11 +27,19 @@ class GameData {
          rightName: String, rightScore: Int, rightFoul: Int) {
         self.GameIdx = idx;
 
-        self.L_name = leftName;
+        var ln = leftName
+        if ln.characters.count>5{
+            ln = (ln as NSString).substring(to: 5)
+        }
+        self.L_name = ln
         self.L_score = leftScore;
         self.L_foul = leftFoul;
 
-        self.R_name = rightName;
+        var rn = rightName
+        if rn.characters.count>5{
+            rn = (rn as NSString).substring(to: 5)
+        }
+        self.R_name = rn
         self.R_score = rightScore;
         self.R_foul = rightFoul;
     }
@@ -64,6 +72,9 @@ class LiveData {
     var gameData: GameData?;
     var session: VCSimpleSession?;
     var timeCounter: Int = 0
+    var isTimerRunning: Bool = false
+//    var nowDate: Date?
+    var srvTime: Double = 0
     init(wsUrl: String, gameId: String) {
         print("new LiveData\n")
 //        var ws:SIOSocket;
@@ -109,9 +120,13 @@ class LiveData {
 //        Timer.scheduledTimer(timeInterval: 1, invocation: NSInv, repeats: true)
 
 //        let aSelector: Selector = "onTick"
-        Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(onTick), userInfo: nil, repeats: true);
+        if !isTimerRunning {
+            Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(onTick), userInfo: nil, repeats: true);
+        }
+
+        srvTime = data["t"].doubleValue / 1000
+
 //        DispatchQueue.
-//        print(
         let lp = data["player"]["left"];
         let rp = data["player"]["right"];
 
@@ -125,10 +140,15 @@ class LiveData {
     }
 
 
+    func timeStr(sec: Double) -> String {
+        var d = Date(timeIntervalSince1970: sec)
+        var formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss"
+        return formatter.string(from: d)
+    }
+
     func onCommit(data: JSON) {
-
 //        self.gameData?.L_score =
-
     }
 
 
@@ -148,6 +168,7 @@ class LiveData {
         if rs.error == nil {
             self.gameData?.R_score = rs.intValue
         }
+
         if rf.error == nil {
             self.gameData?.R_foul = rf.intValue
         }
@@ -159,8 +180,9 @@ class LiveData {
     }
 
     @objc func onTick() {
-        timeCounter += 1
+//        timeCounter += 1
 //        print("onTick:\(timeCounter)")
+        srvTime += 1.0
         renderRight()
     }
 
@@ -177,7 +199,7 @@ class LiveData {
         let fontSize = 20.0
         let font = UIFont(name: "Arial", size: CGFloat(fontSize))
 
-        var s = String(timeCounter)
+        var s = timeStr(sec: srvTime)
         (s as NSString).draw(at: CGPoint(x: 0, y: 0), withAttributes: [NSFontAttributeName: font!, NSForegroundColorAttributeName: UIColor.red])
         let img = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();

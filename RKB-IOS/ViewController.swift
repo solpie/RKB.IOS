@@ -67,6 +67,7 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
     }
 
     func found(code: String) {
+        NSLog("scaned qrcode: \(code)")
 //        {"rtmp":"rtmp://rtmp.icassi.us/live/test1","gameId":"78"}
         if let dataFromString = code.data(using: .utf8, allowLossyConversion: false) {
             let json = JSON(data: dataFromString)
@@ -93,42 +94,57 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
 //////////////////////scan
     @IBAction func onTouchScan(_ sender: Any) {
         view.backgroundColor = UIColor.black
-        captureSession = AVCaptureSession()
-
-        let videoCaptureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
-        let videoInput: AVCaptureDeviceInput
-
-        do {
-            videoInput = try AVCaptureDeviceInput(device: videoCaptureDevice)
-        } catch {
-            return
-        }
-
-        if (captureSession.canAddInput(videoInput)) {
-            captureSession.addInput(videoInput)
-        } else {
-            failed();
+        UIGraphicsBeginImageContextWithOptions(previewView.bounds.size, true, UIScreen.main.scale)
+        previewView.drawHierarchy(in: previewView.bounds, afterScreenUpdates: true)
+        let uiImage = UIGraphicsGetImageFromCurrentImageContext()
+        let image = CIImage.init(image: uiImage!)
+        UIGraphicsEndImageContext()
+        let ciContext = CIContext.init()
+        let detector = CIDetector.init(ofType: CIDetectorTypeQRCode, context: ciContext, options: nil)
+        let features = detector?.features(in: image!)
+        guard features != nil && features!.count > 0 else {
             return;
         }
-
-        let metadataOutput = AVCaptureMetadataOutput()
-
-        if (captureSession.canAddOutput(metadataOutput)) {
-            captureSession.addOutput(metadataOutput)
-
-            metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
-            metadataOutput.metadataObjectTypes = [AVMetadataObjectTypeQRCode]
-        } else {
-            failed()
-            return
-        }
+        let feature = features?[0] as! CIQRCodeFeature
+        found(code: feature.messageString!)
+        
+        
+//        captureSession = AVCaptureSession()
+//
+//        let videoCaptureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+//        let videoInput: AVCaptureDeviceInput
+//
+//        do {
+//            videoInput = try AVCaptureDeviceInput(device: videoCaptureDevice)
+//        } catch {
+//            return
+//        }
+//
+//        if (captureSession.canAddInput(videoInput)) {
+//            captureSession.addInput(videoInput)
+//        } else {
+//            failed();
+//            return;
+//        }
+//
+//        let metadataOutput = AVCaptureMetadataOutput()
+//
+//        if (captureSession.canAddOutput(metadataOutput)) {
+//            captureSession.addOutput(metadataOutput)
+//
+//            metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+//            metadataOutput.metadataObjectTypes = [AVMetadataObjectTypeQRCode]
+//        } else {
+//            failed()
+//            return
+//        }
 
 //        previewLayer = AVCaptureVideoPreviewLayer(session: captureSession);
 //        previewLayer.frame = view.layer.bounds;
 //        previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
 //        view.layer.addSublayer(previewLayer);
 
-        captureSession.startRunning();
+//        captureSession.startRunning();
     }
 
     @IBAction func onTouchSync(_ sender: Any) {
@@ -211,7 +227,9 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
     }
 
     func initVideoCore() {
-        session = VCSimpleSession(videoSize: CGSize(width: 1280, height: 720), frameRate: 30, bitrate: 1000000, useInterfaceOrientation: false)
+        session = VCSimpleSession(videoSize: CGSize(width: 1280, height: 720), frameRate: 30, bitrate: 1000000, useInterfaceOrientation: true)
+        session?.aspectMode = VCAspectMode.aspectModeFit
+//        session!.orientationLocked = true
         previewView.addSubview(session!.previewView)
         session!.previewView.frame = previewView.bounds
         session!.delegate = self
