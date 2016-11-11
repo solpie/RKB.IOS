@@ -1,56 +1,131 @@
 import UIKit
 import VideoCore
+import AVFoundation
 
-class ViewController: UIViewController, VCSessionDelegate {
+class ViewController: UIViewController, VCSessionDelegate,AVCaptureMetadataOutputObjectsDelegate {
 
     @IBOutlet weak var previewView: UIView!
-//    @IBOutlet weak var btnConnect: UIButton!
     @IBOutlet weak var panelView: UIView!
     @IBOutlet weak var gameIdTXF: UITextField!
 
     @IBOutlet weak var btnConnect: UIButton!
 
 
-    var isPanelViewMoving:Bool = false
-//    var uiView: UIView!
-//    var btnCon: UIButton!
-//    var gameIDText: UITextField!
+    var isPanelViewMoving: Bool = false
     var session: VCSimpleSession?
 
     var liveData: LiveData!
 
+
+    var captureSession: AVCaptureSession!
+    var previewLayer: AVCaptureVideoPreviewLayer!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initUI()
         UIApplication.shared.isIdleTimerDisabled = true;
         // Do any additional setup after loading the view, typically from a nib.
-        initVideoCore()
+//        initVideoCore()
+
+
+        view.backgroundColor = UIColor.black
+        captureSession = AVCaptureSession()
+
+        let videoCaptureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+        let videoInput: AVCaptureDeviceInput
+
+        do {
+            videoInput = try AVCaptureDeviceInput(device: videoCaptureDevice)
+        } catch {
+            return
+        }
+
+        if (captureSession.canAddInput(videoInput)) {
+            captureSession.addInput(videoInput)
+        } else {
+            failed();
+            return;
+        }
+
+        let metadataOutput = AVCaptureMetadataOutput()
+
+        if (captureSession.canAddOutput(metadataOutput)) {
+            captureSession.addOutput(metadataOutput)
+
+            metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+            metadataOutput.metadataObjectTypes = [AVMetadataObjectTypeQRCode]
+        } else {
+            failed()
+            return
+        }
+
+        previewLayer = AVCaptureVideoPreviewLayer(session: captureSession);
+        previewLayer.frame = view.layer.bounds;
+        previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+        view.layer.addSublayer(previewLayer);
+
+        captureSession.startRunning();
     }
-//    override func viewDidAppear(animated: Bool) {
-//        super.viewDidAppear(animated)
-////        UIView.animate(withDuration:0.7, delay: 1.0, options: .curveEaseOut, animations: {
-////            var basketTopFrame = self.panelView.frame
-////            basketTopFrame.origin.y -= 100
-////
-//////            var basketBottomFrame = self.basketBottom.frame
-//////            basketBottomFrame.origin.y += basketBottomFrame.size.height
-////
-////            self.panelView.frame = basketTopFrame
-//////            self.basketBottom.frame = basketBottomFrame
-////        }, completion: { finished in
-////            print("Basket doors opened!")
-////        })
-//    }
+
+
+    func failed() {
+        let ac = UIAlertController(title: "Scanning not supported", message: "Your device does not support scanning a code from an item. Please use a device with a camera.", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
+        captureSession = nil
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+
+        if (captureSession?.isRunning == false) {
+            captureSession.startRunning();
+        }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+        if (captureSession?.isRunning == true) {
+            captureSession.stopRunning();
+        }
+    }
+
+    func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputMetadataObjects metadataObjects: [Any]!, from connection: AVCaptureConnection!) {
+        captureSession.stopRunning()
+
+        if let metadataObject = metadataObjects.first {
+            let readableObject = metadataObject as! AVMetadataMachineReadableCodeObject;
+
+            AudioServicesPlaySystemSound(SystemSoundID(kSystemSoundID_Vibrate))
+            found(code: readableObject.stringValue);
+        }
+
+        dismiss(animated: true)
+    }
+
+    func found(code: String) {
+        print(code)
+    }
+
+    override var prefersStatusBarHidden: Bool {
+        return true
+    }
+
+    override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        return .portrait
+    }
+
+    @IBAction func onTouchScan(_ sender: Any) {
+    }
+
     @IBAction func onTouchSync(_ sender: Any) {
         liveData = LiveData(wsUrl: "http://tcp.lb.hoopchina.com:3081", gameId: gameIdTXF.text ?? "")
         self.liveData.session = session
 //
         view.endEditing(true);
-
-
-//
     }
+
     override var canBecomeFirstResponder: Bool {
         return true
     }
@@ -101,6 +176,7 @@ class ViewController: UIViewController, VCSessionDelegate {
         }
     }
 
+  
     func initUI() {
         //
         let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(onSwipe))
@@ -114,7 +190,7 @@ class ViewController: UIViewController, VCSessionDelegate {
 
     func onSwipeDown(recognizer: UISwipeGestureRecognizer) {
         print("swipe down")
-        if panelView.isHidden && !isPanelViewMoving{
+        if panelView.isHidden && !isPanelViewMoving {
             isPanelViewMoving = true
             self.panelView.isHidden = false
             UIView.animate(withDuration: 0.2, delay: 0.0, options: .curveEaseOut, animations: {
@@ -131,7 +207,7 @@ class ViewController: UIViewController, VCSessionDelegate {
 
     func onSwipe(recognizer: UISwipeGestureRecognizer) {
         print("swipe up")
-        if !panelView.isHidden && !isPanelViewMoving{
+        if !panelView.isHidden && !isPanelViewMoving {
             isPanelViewMoving = true
             UIView.animate(withDuration: 0.2, delay: 0.0, options: .curveEaseOut, animations: {
                 var basketTopFrame = self.panelView.frame
@@ -206,5 +282,7 @@ class ViewController: UIViewController, VCSessionDelegate {
             break
         }
     }
+
+
 }
 
