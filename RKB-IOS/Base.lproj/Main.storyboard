@@ -49,7 +49,7 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="78" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Gga-Th-YMi" userLabel="GameIDTxF">
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Gga-Th-YMi" userLabel="GameIDTxF">
                                         <rect key="frame" x="90" y="55" width="70" height="30"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <nil key="textColor"/>
@@ -90,7 +90,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="afk-cN-mfO">
-                                        <rect key="frame" x="560" y="5" width="67" height="45"/>
+                                        <rect key="frame" x="300" y="46" width="67" height="45"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <color key="backgroundColor" red="0.0" green="0.20000000000000001" blue="0.59999999999999998" alpha="1" colorSpace="calibratedRGB"/>
                                         <state key="normal" title="扫一扫">
@@ -123,6 +123,7 @@
                         <outlet property="gameIdTXF" destination="Gga-Th-YMi" id="C0A-8y-CHL"/>
                         <outlet property="panelView" destination="OGx-w2-0HQ" id="Gsa-95-S3r"/>
                         <outlet property="previewView" destination="l9C-zN-svY" id="HH2-bj-chh"/>
+                        <outlet property="rtmpUrlTXF" destination="QOy-GZ-zya" id="NDg-fy-PbI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>

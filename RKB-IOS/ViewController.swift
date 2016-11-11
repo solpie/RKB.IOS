@@ -1,11 +1,13 @@
 import UIKit
 import VideoCore
 import AVFoundation
+import SwiftyJSON
 
-class ViewController: UIViewController, VCSessionDelegate,AVCaptureMetadataOutputObjectsDelegate {
+class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutputObjectsDelegate {
 
     @IBOutlet weak var previewView: UIView!
     @IBOutlet weak var panelView: UIView!
+    @IBOutlet weak var rtmpUrlTXF: UITextField!
     @IBOutlet weak var gameIdTXF: UITextField!
 
     @IBOutlet weak var btnConnect: UIButton!
@@ -18,56 +20,16 @@ class ViewController: UIViewController, VCSessionDelegate,AVCaptureMetadataOutpu
 
 
     var captureSession: AVCaptureSession!
-    var previewLayer: AVCaptureVideoPreviewLayer!
 
     override func viewDidLoad() {
         super.viewDidLoad()
         self.initUI()
         UIApplication.shared.isIdleTimerDisabled = true;
         // Do any additional setup after loading the view, typically from a nib.
-//        initVideoCore()
+        initVideoCore()
 
-
-        view.backgroundColor = UIColor.black
-        captureSession = AVCaptureSession()
-
-        let videoCaptureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
-        let videoInput: AVCaptureDeviceInput
-
-        do {
-            videoInput = try AVCaptureDeviceInput(device: videoCaptureDevice)
-        } catch {
-            return
-        }
-
-        if (captureSession.canAddInput(videoInput)) {
-            captureSession.addInput(videoInput)
-        } else {
-            failed();
-            return;
-        }
-
-        let metadataOutput = AVCaptureMetadataOutput()
-
-        if (captureSession.canAddOutput(metadataOutput)) {
-            captureSession.addOutput(metadataOutput)
-
-            metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
-            metadataOutput.metadataObjectTypes = [AVMetadataObjectTypeQRCode]
-        } else {
-            failed()
-            return
-        }
-
-        previewLayer = AVCaptureVideoPreviewLayer(session: captureSession);
-        previewLayer.frame = view.layer.bounds;
-        previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
-        view.layer.addSublayer(previewLayer);
-
-        captureSession.startRunning();
     }
-
-
+    ///scan
     func failed() {
         let ac = UIAlertController(title: "Scanning not supported", message: "Your device does not support scanning a code from an item. Please use a device with a camera.", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))
@@ -105,6 +67,19 @@ class ViewController: UIViewController, VCSessionDelegate,AVCaptureMetadataOutpu
     }
 
     func found(code: String) {
+//        {"rtmp":"rtmp://rtmp.icassi.us/live/test1","gameId":"78"}
+        if let dataFromString = code.data(using: .utf8, allowLossyConversion: false) {
+            let json = JSON(data: dataFromString)
+
+            if let url = json["rtmp"].string {
+                rtmpUrlTXF.text = url
+            }
+
+            if let gameId = json["gameId"].string {
+                gameIdTXF.text = gameId
+            }
+        }
+//        view.addSubview(session!.previewView)
         print(code)
     }
 
@@ -113,16 +88,52 @@ class ViewController: UIViewController, VCSessionDelegate,AVCaptureMetadataOutpu
     }
 
     override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
-        return .portrait
+        return .landscapeLeft
     }
-
+//////////////////////scan
     @IBAction func onTouchScan(_ sender: Any) {
+        view.backgroundColor = UIColor.black
+        captureSession = AVCaptureSession()
+
+        let videoCaptureDevice = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
+        let videoInput: AVCaptureDeviceInput
+
+        do {
+            videoInput = try AVCaptureDeviceInput(device: videoCaptureDevice)
+        } catch {
+            return
+        }
+
+        if (captureSession.canAddInput(videoInput)) {
+            captureSession.addInput(videoInput)
+        } else {
+            failed();
+            return;
+        }
+
+        let metadataOutput = AVCaptureMetadataOutput()
+
+        if (captureSession.canAddOutput(metadataOutput)) {
+            captureSession.addOutput(metadataOutput)
+
+            metadataOutput.setMetadataObjectsDelegate(self, queue: DispatchQueue.main)
+            metadataOutput.metadataObjectTypes = [AVMetadataObjectTypeQRCode]
+        } else {
+            failed()
+            return
+        }
+
+//        previewLayer = AVCaptureVideoPreviewLayer(session: captureSession);
+//        previewLayer.frame = view.layer.bounds;
+//        previewLayer.videoGravity = AVLayerVideoGravityResizeAspectFill;
+//        view.layer.addSublayer(previewLayer);
+
+        captureSession.startRunning();
     }
 
     @IBAction func onTouchSync(_ sender: Any) {
         liveData = LiveData(wsUrl: "http://tcp.lb.hoopchina.com:3081", gameId: gameIdTXF.text ?? "")
         self.liveData.session = session
-//
         view.endEditing(true);
     }
 
@@ -131,44 +142,17 @@ class ViewController: UIViewController, VCSessionDelegate,AVCaptureMetadataOutpu
     }
 
     override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
-
         if motion == .motionShake {
             print("shake!")
-            UIControl().sendAction(Selector("suspend"), to: UIApplication.shared, for: nil)
-
+            abort()
+//            UIControl().sendAction(Selector("suspend"), to: UIApplication.shared, for: nil)
         }
-//        if motion == .motionShake && randomNumber == SHAKE
-//        {
-//            debugPrint("SHAKE RECEIVED")
-//            correctActionPerformed = true
-//        }
-//        else if motion == .motionShake && randomNumber != SHAKE
-//        {
-//            debugPrint("WRONG ACTION")
-//            wrongActionPerformed = true
-//        }
-//        else
-//        {
-//            debugPrint("WRONG ACTION")
-//            wrongActionPerformed = true
-//        }
     }
-//    override func motionEnded(motion: UIEventSubtype,
-//                              withEvent event: UIEvent?) {
-//
-//        if motion == .MotionShake {
-//
-//            //Comment: to terminate app, do not use exit(0) bc that is logged as a crash.
-//            UIControl().sendAction(#selector(NSURLSessionTask.suspend), to: UIApplication.sharedApplication(), forEvent: nil)
-//
-//            UIControl().sendAction(Selector("suspend"), to: UIApplication.sharedApplication(), forEvent: nil)
-//        }
-//    }
 
     @IBAction func onTouchBtnConnect(_ sender: Any) {
         switch session?.rtmpSessionState {
         case .none, .previewStarted?, .ended?, .error?:
-            session?.startRtmpSession(withURL: "rtmp://rtmp.icassi.us/live", andStreamKey: "test1")
+            session?.startRtmpSession(withURL: rtmpUrlTXF.text, andStreamKey: "")
 
         default:
             session?.endRtmpSession()
@@ -176,7 +160,7 @@ class ViewController: UIViewController, VCSessionDelegate,AVCaptureMetadataOutpu
         }
     }
 
-  
+
     func initUI() {
         //
         let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(onSwipe))
@@ -257,31 +241,31 @@ class ViewController: UIViewController, VCSessionDelegate,AVCaptureMetadataOutpu
         }
     }
 
-    @IBAction func btnFilterTouch(_ sender: AnyObject) {
-        switch self.session!.filter {
-
-        case .normal:
-            self.session!.filter = .gray
-
-        case .gray:
-            self.session!.filter = .invertColors
-
-        case .invertColors:
-            self.session!.filter = .sepia
-
-        case .sepia:
-            self.session!.filter = .fisheye
-
-        case .fisheye:
-            self.session!.filter = .glow
-
-        case .glow:
-            self.session!.filter = .normal
-
-        default: // Future proofing
-            break
-        }
-    }
+//    @IBAction func btnFilterTouch(_ sender: AnyObject) {
+//        switch self.session!.filter {
+//
+//        case .normal:
+//            self.session!.filter = .gray
+//
+//        case .gray:
+//            self.session!.filter = .invertColors
+//
+//        case .invertColors:
+//            self.session!.filter = .sepia
+//
+//        case .sepia:
+//            self.session!.filter = .fisheye
+//
+//        case .fisheye:
+//            self.session!.filter = .glow
+//
+//        case .glow:
+//            self.session!.filter = .normal
+//
+//        default: // Future proofing
+//            break
+//        }
+//    }
 
 
 }
