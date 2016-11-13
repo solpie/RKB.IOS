@@ -16,10 +16,6 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
 
     @IBOutlet weak var scoreView: UIView!
 
-//    @IBOutlet weak var gameInfo: UITextField!
-//    @IBOutlet weak var leftInfo: UILabel!
-
-//    @IBOutlet weak var leftInfo: UITextView!
     @IBOutlet weak var gameInfo: UILabel!
 
     var isPanelViewMoving: Bool = false
@@ -37,7 +33,7 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
         // Do any additional setup after loading the view, typically from a nib.
         initVideoCore()
 
-        initWebView()
+//        initWebView()
 
     }
 
@@ -68,6 +64,14 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
 //////////////////////scan
     @IBAction func onTouchScan(_ sender: Any) {
         view.backgroundColor = UIColor.black
+        rescanCount = 3
+        getQRCode()
+    }
+
+    var rescanCount: Int = 0
+
+    func getQRCode() {
+        rescanCount -= 1
         UIGraphicsBeginImageContextWithOptions(previewView.bounds.size, true, UIScreen.main.scale)
         previewView.drawHierarchy(in: previewView.bounds, afterScreenUpdates: true)
         let uiImage = UIGraphicsGetImageFromCurrentImageContext()
@@ -77,13 +81,26 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
         let detector = CIDetector.init(ofType: CIDetectorTypeQRCode, context: ciContext, options: nil)
         let features = detector?.features(in: image!)
         guard features != nil && features!.count > 0 else {
+            if (rescanCount > 0) {
+                Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(getQRCode), userInfo: nil, repeats: false);
+            }
             return;
         }
         let feature = features?[0] as! CIQRCodeFeature
         found(code: feature.messageString!)
 
+        oneButtonAlert.show()
+
+        Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(hideAlert), userInfo: nil, repeats: false);
 
     }
+    let oneButtonAlert:UIAlertView = UIAlertView(title: "！", message: "扫码完成", delegate: nil, cancelButtonTitle: "确定")
+
+    func hideAlert()
+    {
+        oneButtonAlert.dismiss(withClickedButtonIndex: 0, animated: true)
+    }
+
     let rect1 = CGRect(x: 300, y: 300, width: 512, height: 512);
 
     func captureWebView() {
@@ -91,8 +108,8 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
 
 //        let rect = CGRect(x: 300, y: 300, width: 512, height: 512);
         UIGraphicsBeginImageContext(rect1.size)
-        if let ctx = UIGraphicsGetCurrentContext(){
-            webView.layer.render(in:ctx)
+        if let ctx = UIGraphicsGetCurrentContext() {
+            webView.layer.render(in: ctx)
             let screenshot = UIGraphicsGetImageFromCurrentImageContext()
 //            UIGraphicsEndImageContext()
 
@@ -112,7 +129,6 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
     }
 
     func onMsg(msg: String) {
-
         print(msg)
         gameInfo.text = msg
     }
