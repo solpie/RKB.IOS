@@ -23,6 +23,13 @@
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="l9C-zN-svY">
                                 <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
+                                <subviews>
+                                    <webView contentMode="scaleToFill" fixedFrame="YES" scalesPageToFit="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Zzs-fF-wnO">
+                                        <rect key="frame" x="0.0" y="0.0" width="667" height="375"/>
+                                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                        <color key="backgroundColor" red="0.36078431370000003" green="0.38823529410000002" blue="0.4039215686" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    </webView>
+                                </subviews>
                             </view>
                             <view contentMode="top" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="OGx-w2-0HQ" userLabel="Top View">
                                 <rect key="frame" x="0.0" y="0.0" width="667" height="120"/>
@@ -144,6 +151,7 @@
                         <outlet property="previewView" destination="l9C-zN-svY" id="HH2-bj-chh"/>
                         <outlet property="rtmpUrlTXF" destination="QOy-GZ-zya" id="NDg-fy-PbI"/>
                         <outlet property="scoreView" destination="uL1-Yb-Y6B" id="0us-og-Iux"/>
+                        <outlet property="webView" destination="Zzs-fF-wnO" id="r34-z3-d5r"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>

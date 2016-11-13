@@ -6,6 +6,8 @@ import SwiftyJSON
 class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutputObjectsDelegate {
 
     @IBOutlet weak var previewView: UIView!
+    @IBOutlet weak var webView: UIWebView!
+
     @IBOutlet weak var panelView: UIView!
     @IBOutlet weak var rtmpUrlTXF: UITextField!
     @IBOutlet weak var gameIdTXF: UITextField!
@@ -35,6 +37,16 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
         // Do any additional setup after loading the view, typically from a nib.
         initVideoCore()
 
+        initWebView()
+
+    }
+
+    func initWebView() {
+        if let url = URL(string: "http://apple.com") {
+            print("load url")
+            let request = URLRequest(url: url)
+            webView.loadRequest(request)
+        }
     }
     ///scan
     func found(code: String) {
@@ -72,8 +84,26 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
 
 
     }
+    let rect1 = CGRect(x: 300, y: 300, width: 512, height: 512);
+
+    func captureWebView() {
+        //capture the screenshot
+
+//        let rect = CGRect(x: 300, y: 300, width: 512, height: 512);
+        UIGraphicsBeginImageContext(rect1.size)
+        if let ctx = UIGraphicsGetCurrentContext(){
+            webView.layer.render(in:ctx)
+            let screenshot = UIGraphicsGetImageFromCurrentImageContext()
+//            UIGraphicsEndImageContext()
+
+            self.session?.addPixelBufferSource(screenshot, with: rect1)
+        }
+
+    }
 
     @IBAction func onTouchSync(_ sender: Any) {
+//        Timer.scheduledTimer(timeInterval: 0.033, target: self, selector: #selector(captureWebView), userInfo: nil, repeats: true);
+//        captureWebView()
         liveData = LiveData(wsUrl: "http://tcp.lb.hoopchina.com:3081", gameId: gameIdTXF.text ?? "")
         self.liveData.session = session
 

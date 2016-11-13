@@ -22,9 +22,9 @@ class GameData {
     var R_score: Int;
     var R_foul: Int;
 
-    var GameState:String?
-    var LeftNameFull:String
-    var RightNameFull:String
+    var GameState: String?
+    var LeftNameFull: String
+    var RightNameFull: String
     init(idx: Int,
          leftName: String, leftScore: Int, leftFoul: Int,
          rightName: String, rightScore: Int, rightFoul: Int) {
@@ -33,7 +33,7 @@ class GameData {
         LeftNameFull = leftName
         RightNameFull = rightName
         var ln = leftName
-        if ln.characters.count>5{
+        if ln.characters.count > 5 {
             ln = (ln as NSString).substring(to: 5)
         }
         self.L_name = ln
@@ -41,7 +41,7 @@ class GameData {
         self.L_foul = leftFoul;
 
         var rn = rightName
-        if rn.characters.count>5{
+        if rn.characters.count > 5 {
             rn = (rn as NSString).substring(to: 5)
         }
         self.R_name = rn
@@ -81,7 +81,7 @@ class LiveData {
 //    var nowDate: Date?
     var srvTime: Double = 0
 
-    var onMsg:((_:String)->Void)!
+    var onMsg: ((_: String) -> Void)!
 
     init(wsUrl: String, gameId: String) {
         print("new LiveData\n")
@@ -152,7 +152,7 @@ class LiveData {
     func timeStr(sec: Double) -> String {
         let d = Date(timeIntervalSince1970: sec)
         let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm:ss"
+        formatter.dateFormat = "mm:ss"
         return formatter.string(from: d)
     }
 
@@ -205,13 +205,15 @@ class LiveData {
         ctx?.fill(CGRect(x: 0, y: 0, width: 150, height: 70))
         //draw text
         ctx?.setTextDrawingMode(CGTextDrawingMode.fill)
-        ctx?.setFillColor(UIColor.red.cgColor)
-//            let text = s as NSString
-        let fontSize = 20.0
+//        ctx?.setFillColor(UIColor.green.cgColor)
+
+        let fontSize = 40.0
         let font = UIFont(name: "Arial", size: CGFloat(fontSize))
 
         let s = timeStr(sec: srvTime)
-        (s as NSString).draw(at: CGPoint(x: 0, y: 0), withAttributes: [NSFontAttributeName: font!, NSForegroundColorAttributeName: UIColor.red])
+        (s as NSString).draw(at: CGPoint(x: 0, y: 0),
+                withAttributes: [NSFontAttributeName: font!,
+                                 NSForegroundColorAttributeName: UIColor.green])
         let img = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
 
@@ -228,7 +230,7 @@ class LiveData {
             ctx?.fill(CGRect(x: 0, y: 0, width: 150, height: 70))
             //draw text
             ctx?.setTextDrawingMode(CGTextDrawingMode.fill)
-            ctx?.setFillColor(UIColor.red.cgColor)
+//            ctx?.setFillColor(UIColor.red.cgColor)
 //            let text = s as NSString
             let fontSize = 20.0
             let font = UIFont(name: "Arial", size: CGFloat(fontSize))
@@ -238,7 +240,7 @@ class LiveData {
             s = self.gameData?.getLPDrawText() ?? ""
             (s as NSString).draw(at: CGPoint(x: 0, y: 0), withAttributes: [NSFontAttributeName: font!, NSForegroundColorAttributeName: UIColor.red])
             s = self.gameData?.getRPDrawText() ?? ""
-            (s as NSString).draw(at: CGPoint(x: 0, y: fontSize), withAttributes: [NSFontAttributeName: font!, NSForegroundColorAttributeName: UIColor.blue])
+            (s as NSString).draw(at: CGPoint(x: 0, y: fontSize), withAttributes: [NSFontAttributeName: font!, NSForegroundColorAttributeName: UIColor.white])
             let image2 = UIGraphicsGetImageFromCurrentImageContext();
             UIGraphicsEndImageContext();
 
