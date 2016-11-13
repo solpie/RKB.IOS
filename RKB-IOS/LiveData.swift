@@ -1,10 +1,7 @@
 //
 //  LiveData.swift
-//  SampleBroadcaster-Swift
 //
 //  Created by ocean on 2016/11/9.
-//  Copyright © 2016年 videocore. All rights reserved.
-//
 
 import Foundation
 import SIOSocket
@@ -61,8 +58,6 @@ class GameData {
 
     func getLPDrawText() -> String {
         return "LP:\(self.L_name) \nS:\(self.L_score) F:\(self.L_foul)\n"
-
-//        +"RP:\(self.R_name) S:\(self.R_score) F:\(self.R_foul)\n";
     }
 
 
@@ -87,7 +82,6 @@ class LiveData {
         print("new LiveData\n")
 //        var ws:SIOSocket;
         self.gameId = gameId;
-
 
         SIOSocket.socket(withHost: wsUrl, response: {
             [weak self](socket: SIOSocket?) -> Void in
@@ -124,10 +118,6 @@ class LiveData {
 
 
     func onInit(data: JSON) {
-//        var timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.onTick), userInfo: nil, repeats: true);
-//        Timer.scheduledTimer(timeInterval: 1, invocation: NSInv, repeats: true)
-
-//        let aSelector: Selector = "onTick"
         if !isTimerRunning {
             Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(onTick), userInfo: nil, repeats: true);
         }
