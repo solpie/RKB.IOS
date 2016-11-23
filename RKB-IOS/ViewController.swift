@@ -14,6 +14,7 @@ class ViewController: UIViewController,
     @IBOutlet weak var rtmpUrlTXF: UITextField!
     @IBOutlet weak var gameIdTXF: UITextField!
 
+    @IBOutlet weak var bitrateText: UILabel!
     @IBOutlet weak var btnConnect: UIButton!
 
     @IBOutlet weak var scoreView: UIView!
@@ -24,6 +25,7 @@ class ViewController: UIViewController,
 
 
     var isPanelViewMoving: Bool = false
+    var isAutoCon: Bool = false
     var session: VCSimpleSession?
     var bitrate: Int = 0;
 
@@ -35,115 +37,49 @@ class ViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
         UIApplication.shared.isIdleTimerDisabled = true;
+        
+        
+//        if AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) == .notDetermined {
+//            AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: { (granted: Bool) in
+//                if granted {
+//                    print("granted")
+//                }
+//                else {
+//                    print("not granted")
+//                }
+//            })
+//        }
         // Do any additional setup after loading the view, typically from a nib.
         initVideoCore()
         initUI()
 
         test()
     }
-
-    @IBAction func onSwipeRight(_ sender: Any) {
-        print("swipe right")
-        volSlider.isHidden = false
+    override var canBecomeFirstResponder: Bool {
+        return true
     }
 
-    @IBAction func onVolChange(_ sender: Any) {
-//        volSlider.value
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
     }
+
+    deinit {
+        previewView = nil
+        session?.delegate = nil;
+    }
+    /// override
 
     func test() {
         rtmpUrlTXF.text = "rtmp://rtmp.icassi.us/live/test"
         gameIdTXF.text = "78"
     }
-//    func initWebView() {
-//        if let url = URL(string: "http://apple.com") {
-//            print("load url")
-//            let request = URLRequest(url: url)
-//            webView.loadRequest(request)
-//        }
-//    }
-    ///scan
-    func found(code: String) {
-//        {"rtmp":"rtmp://rtmp.icassi.us/live/test1","gameId":"78"}
-        if let dataFromString = code.data(using: .utf8, allowLossyConversion: false) {
-            let json = JSON(data: dataFromString)
 
-            if let url = json["rtmp"].string {
-                rtmpUrlTXF.text = url
-            }
-
-            if let gameId = json["gameId"].string {
-                gameIdTXF.text = gameId
-            }
-        }
-        print(code)
-    }
-
-    @IBAction func onBit(_ sender: Any) {
-//        if (self.menu?.isDescendant(of: self.view) == true) {
-//            self.menu?.hideMenu()
-//        } else {
-//            self.menu?.showMenuFromView(self.view)
-//        }
-    }
-//////////////////////scan
     @IBAction func onTouchScan(_ sender: Any) {
         view.backgroundColor = UIColor.black
         rescanCount = 3
         getQRCode()
     }
-
-    var rescanCount: Int = 0
-
-    func getQRCode() {
-        rescanCount -= 1
-        UIGraphicsBeginImageContextWithOptions(previewView.bounds.size, true, UIScreen.main.scale)
-        previewView.drawHierarchy(in: previewView.bounds, afterScreenUpdates: true)
-        let uiImage = UIGraphicsGetImageFromCurrentImageContext()
-        let image = CIImage.init(image: uiImage!)
-        UIGraphicsEndImageContext()
-        let ciContext = CIContext.init()
-        let detector = CIDetector.init(ofType: CIDetectorTypeQRCode, context: ciContext, options: nil)
-        let features = detector?.features(in: image!)
-        guard features != nil && features!.count > 0 else {
-            if (rescanCount > 0) {
-                Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(getQRCode), userInfo: nil, repeats: false);
-            }
-            return;
-        }
-        let feature = features?[0] as! CIQRCodeFeature
-        found(code: feature.messageString!)
-
-        if oneButtonAlert == nil {
-            oneButtonAlert = UIAlertView(title: "！",
-                    message: "扫码完成", delegate: nil, cancelButtonTitle: "确定")
-
-        }
-        oneButtonAlert?.show()
-
-        Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(hideAlert), userInfo: nil, repeats: false);
-    }
-
-    var oneButtonAlert: UIAlertView?
-    func hideAlert() {
-        oneButtonAlert?.dismiss(withClickedButtonIndex: 0, animated: true)
-    }
-
-    let rect1 = CGRect(x: 300, y: 300, width: 512, height: 512);
-
-//    func captureWebView() {
-//        //capture the screenshot
-////        let rect = CGRect(x: 300, y: 300, width: 512, height: 512);
-//        UIGraphicsBeginImageContext(rect1.size)
-//        if let ctx = UIGraphicsGetCurrentContext() {
-//            webView.layer.render(in: ctx)
-//            let screenshot = UIGraphicsGetImageFromCurrentImageContext()
-////            UIGraphicsEndImageContext()
-//
-//            self.session?.addPixelBufferSource(screenshot, with: rect1)
-//        }
-//
-//    }
 
     @IBAction func onTouchSync(_ sender: Any) {
 //        Timer.scheduledTimer(timeInterval: 0.033, target: self, selector: #selector(captureWebView), userInfo: nil, repeats: true);
@@ -158,22 +94,27 @@ class ViewController: UIViewController,
         view.endEditing(true);
     }
 
-    func onMsg(msg: String) {
-        print(msg)
-        gameInfo.text = msg
+    @IBAction func onBit(_ sender: Any) {
+        picker.fadeIn()
     }
 
-    func onPick(b: Int) {
-        self.bitrate = b
-        session?.bitrate = Int32(b)
+    @IBAction func onTouchBtnConnect(_ sender: Any) {
+        con()
     }
 
-    override var canBecomeFirstResponder: Bool {
-        return true
+    @IBAction func onVolChange(_ sender: Any) {
+//        volSlider.value
     }
 
+    //                     gesture
     @IBAction func onTapView(_ sender: Any) {
         view.endEditing(true);
+        picker.fadeOut()
+    }
+
+    @IBAction func onSwipeRight(_ sender: Any) {
+        print("swipe right")
+        volSlider.isHidden = false
     }
 
     override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
@@ -184,40 +125,6 @@ class ViewController: UIViewController,
         }
     }
 
-    @IBAction func onTouchBtnConnect(_ sender: Any) {
-        if rtmpUrlTXF.text != "" {
-            switch session?.rtmpSessionState {
-            case .none, .previewStarted?, .ended?, .error?:
-                session?.startRtmpSession(withURL: rtmpUrlTXF.text, andStreamKey: "")
-            default:
-                session?.endRtmpSession()
-                break
-            }
-        }
-
-    }
-
-    func initUI() {
-        picker = Picker()
-        view.addSubview(picker.ui)
-        picker.onPick = self.onPick
-
-        let bottomFrame = CGRect(origin: CGPoint(x: 0, y: view.bounds.size.height), size: scoreView.frame.size)
-        scoreView.frame = bottomFrame
-        volSlider.frame.origin = CGPoint(x: 50, y: view.bounds.size.height - 75)
-        volSlider.isHidden = true
-
-
-        //
-        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(onSwipe))
-        swipeUp.direction = UISwipeGestureRecognizerDirection.up
-        view.addGestureRecognizer(swipeUp)
-
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(onSwipeDown))
-        swipeDown.direction = UISwipeGestureRecognizerDirection.down
-        view.addGestureRecognizer(swipeDown)
-
-    }
 
     func onSwipeDown(recognizer: UISwipeGestureRecognizer) {
         print("swipe down")
@@ -276,48 +183,171 @@ class ViewController: UIViewController,
 //        print(point.x)
 //        print(point.y)
     }
+    //                     gesture
+
+
+
+//    func initWebView() {
+//        if let url = URL(string: "http://apple.com") {
+//            print("load url")
+//            let request = URLRequest(url: url)
+//            webView.loadRequest(request)
+//        }
+//    }
+    ///scan
+    func found(code: String) {
+//        {"rtmp":"rtmp://rtmp.icassi.us/live/test1","gameId":"78"}
+        if let dataFromString = code.data(using: .utf8, allowLossyConversion: false) {
+            let json = JSON(data: dataFromString)
+
+            if let url = json["rtmp"].string {
+                rtmpUrlTXF.text = url
+            }
+
+            if let gameId = json["gameId"].string {
+                gameIdTXF.text = gameId
+            }
+        }
+        print(code)
+    }
+
+
+    var rescanCount: Int = 0
+
+    func getQRCode() {
+        rescanCount -= 1
+        UIGraphicsBeginImageContextWithOptions(previewView.bounds.size, true, UIScreen.main.scale)
+        previewView.drawHierarchy(in: previewView.bounds, afterScreenUpdates: true)
+        let uiImage = UIGraphicsGetImageFromCurrentImageContext()
+        let image = CIImage.init(image: uiImage!)
+        UIGraphicsEndImageContext()
+        let ciContext = CIContext.init()
+        let detector = CIDetector.init(ofType: CIDetectorTypeQRCode, context: ciContext, options: nil)
+        let features = detector?.features(in: image!)
+        guard features != nil && features!.count > 0 else {
+            if (rescanCount > 0) {
+                Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(getQRCode), userInfo: nil, repeats: false);
+            }
+            return;
+        }
+        let feature = features?[0] as! CIQRCodeFeature
+        found(code: feature.messageString!)
+
+        if oneButtonAlert == nil {
+            oneButtonAlert = UIAlertView(title: "！",
+                    message: "扫码完成", delegate: nil, cancelButtonTitle: "确定")
+
+        }
+        oneButtonAlert?.show()
+
+        Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(hideAlert), userInfo: nil, repeats: false);
+    }
+
+    var oneButtonAlert: UIAlertView?
+    func hideAlert() {
+        oneButtonAlert?.dismiss(withClickedButtonIndex: 0, animated: true)
+    }
+
+    let rect1 = CGRect(x: 300, y: 300, width: 512, height: 512);
+//////////////////////scan
+
+//    func captureWebView() {
+//        //capture the screenshot
+////        let rect = CGRect(x: 300, y: 300, width: 512, height: 512);
+//        UIGraphicsBeginImageContext(rect1.size)
+//        if let ctx = UIGraphicsGetCurrentContext() {
+//            webView.layer.render(in: ctx)
+//            let screenshot = UIGraphicsGetImageFromCurrentImageContext()
+////            UIGraphicsEndImageContext()
+//
+//            self.session?.addPixelBufferSource(screenshot, with: rect1)
+//        }
+//
+//    }
+    func connectionStatusChanged(_ sessionState: VCSessionState) {
+        print("state:", session!.rtmpSessionState)
+        switch session!.rtmpSessionState {
+        case .starting:
+            btnConnect.setTitle("链接中...", for: UIControlState())
+        case .started:
+            btnConnect.setTitle("断开链接", for: UIControlState())
+        default:
+            btnConnect.setTitle("开始推流", for: UIControlState())
+            if isAutoCon {
+                isAutoCon = false
+                con()
+            }
+        }
+    }
+
+    func onMsg(msg: String) {
+        print(msg)
+        gameInfo.text = msg
+    }
+
+    func onPick(b: Int,title:String) {
+        picker.fadeOut()
+        
+        self.bitrate = b
+        bitrateText.text = title
+
+        session?.endRtmpSession()
+        session?.previewView.removeFromSuperview()
+
+        initVideoCore()
+        isAutoCon = true
+    }
+
+    func con() {
+        if rtmpUrlTXF.text != "" {
+            switch session?.rtmpSessionState {
+            case .none, .previewStarted?, .ended?, .error?:
+                session?.startRtmpSession(withURL: rtmpUrlTXF.text, andStreamKey: "")
+            default:
+                session?.endRtmpSession()
+                break
+            }
+        }
+    }
 
     func initVideoCore() {
-//        if self.bitrate!=0{
-//
-//        }
-        session = VCSimpleSession(videoSize: CGSize(width: 1280, height: 720), frameRate: 30, bitrate: 1000000, useInterfaceOrientation: true)
+        if bitrate == 0 {
+            bitrate = 2000000
+        }
+        session = VCSimpleSession(videoSize: CGSize(width: 1280, height: 720), frameRate: 30, bitrate: Int32(bitrate), useInterfaceOrientation: true)
         session?.aspectMode = VCAspectMode.aspectModeFit
-        
 
 //        session?.continuousAutofocus = true
 //        session?.continuousExposure = true
-
-
 //        session!.orientationLocked = true
         previewView.addSubview(session!.previewView)
         session!.previewView.frame = previewView.bounds
         session!.delegate = self
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    func initUI() {
+//        AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo,
+        picker = Picker(parent:view)
+        picker.onPick = self.onPick
+
+        let bottomFrame = CGRect(origin: CGPoint(x: 0, y: view.bounds.size.height), size: scoreView.frame.size)
+        scoreView.frame = bottomFrame
+        volSlider.frame.origin = CGPoint(x: 50, y: view.bounds.size.height - 75)
+        volSlider.isHidden = true
+
+
+        //
+        let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(onSwipe))
+        swipeUp.direction = UISwipeGestureRecognizerDirection.up
+        view.addGestureRecognizer(swipeUp)
+
+        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(onSwipeDown))
+        swipeDown.direction = UISwipeGestureRecognizerDirection.down
+        view.addGestureRecognizer(swipeDown)
     }
 
-    deinit {
-        previewView = nil
-        session?.delegate = nil;
-    }
 
 
-    func connectionStatusChanged(_ sessionState: VCSessionState) {
-        switch session!.rtmpSessionState {
-        case .starting:
-            btnConnect.setTitle("链接中...", for: UIControlState())
-
-        case .started:
-            btnConnect.setTitle("断开链接", for: UIControlState())
-
-        default:
-            btnConnect.setTitle("开始推流", for: UIControlState())
-        }
-    }
 
 //    @IBAction func btnFilterTouch(_ sender: AnyObject) {
 //        switch self.session!.filter {

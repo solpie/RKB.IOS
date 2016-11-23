@@ -87,6 +87,10 @@ class LiveData {
 
     func con(wsUrl: String, gameId: String) {
         self.gameId = gameId;
+        if self.ws != nil{
+            self.ws?.close()
+        }
+    
         SIOSocket.socket(withHost: wsUrl, response: {
             [weak self](socket: SIOSocket?) -> Void in
             self?.ws = socket
@@ -126,7 +130,7 @@ class LiveData {
     }
 
     func killTimer() {
-        self.ws?.close()
+        
         timer?.invalidate();
         timer = nil;
         count1 = 10;
