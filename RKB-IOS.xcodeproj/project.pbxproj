@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		307938501C0F540F0034CC99 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3079384F1C0F540F0034CC99 /* AVFoundation.framework */; };
 		307938521C0F54170034CC99 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 307938511C0F54170034CC99 /* CoreGraphics.framework */; };
+		64AB8E2B0E6865C5727E0305 /* Picker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 64AB8C35DAA9DE57DF3465CB /* Picker.swift */; };
 		6C157D311AD9735A00C7FAD3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C157D301AD9735A00C7FAD3 /* AppDelegate.swift */; };
 		6C157D331AD9735A00C7FAD3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6C157D321AD9735A00C7FAD3 /* ViewController.swift */; };
 		6C157D361AD9735A00C7FAD3 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6C157D341AD9735A00C7FAD3 /* Main.storyboard */; };
@@ -24,6 +25,7 @@
 		2A6111A77B2C2074CA9709D4 /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3079384F1C0F540F0034CC99 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		307938511C0F54170034CC99 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
+		64AB8C35DAA9DE57DF3465CB /* Picker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Picker.swift; sourceTree = "<group>"; };
 		6C157D2B1AD9735A00C7FAD3 /* RKB LiveData.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "RKB LiveData.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C157D2F1AD9735A00C7FAD3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6C157D301AD9735A00C7FAD3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 				6C157D391AD9735A00C7FAD3 /* LaunchScreen.xib */,
 				6C157D2E1AD9735A00C7FAD3 /* Supporting Files */,
 				6C157D501AD9A24900C7FAD3 /* VideoCore-Bridging-Header.h */,
+				64AB8C35DAA9DE57DF3465CB /* Picker.swift */,
 			);
 			path = "RKB-IOS";
 			sourceTree = "<group>";
@@ -238,6 +241,7 @@
 				6C157D331AD9735A00C7FAD3 /* ViewController.swift in Sources */,
 				6C157D311AD9735A00C7FAD3 /* AppDelegate.swift in Sources */,
 				8E0792B41DD3241F006ED30B /* LiveData.swift in Sources */,
+				64AB8E2B0E6865C5727E0305 /* Picker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -67,12 +67,14 @@ class GameData {
 }
 
 class LiveData {
-//    var ws:SIOSocket;
-    var gameId: String;
+    var ws:SIOSocket?;
+    var gameId: String?;
     var gameData: GameData?;
     var session: VCSimpleSession?;
     var timeCounter: Int = 0
     var isTimerRunning: Bool = false
+    var isCon: Bool = false
+    var timer: Timer?;
 //    var nowDate: Date?
     var srvTime: Double = 0
 
@@ -80,11 +82,14 @@ class LiveData {
 
     init(wsUrl: String, gameId: String) {
         print("new LiveData\n")
-//        var ws:SIOSocket;
-        self.gameId = gameId;
+        con(wsUrl: wsUrl, gameId: gameId)
+    }
 
+    func con(wsUrl: String, gameId: String) {
+        self.gameId = gameId;
         SIOSocket.socket(withHost: wsUrl, response: {
             [weak self](socket: SIOSocket?) -> Void in
+            self?.ws = socket
 
             socket?.onConnect = {
                 () -> Void in
@@ -93,6 +98,11 @@ class LiveData {
 
                 socket?.emit("passerbyking", args: [["game_id": gameId, "page": "score"]])
 
+            }
+            
+            socket?.onDisconnect = {
+                ()->Void in
+                print("dis con")
             }
 //
             socket?.on("wall", callback: {
@@ -105,22 +115,29 @@ class LiveData {
                     self!.onInit(data: jd)
                 case "updateScore":
                     self!.onUpdate(data: jd)
-                case "commitGame":
-                    self!.onCommit(data: jd)
+//                case "commitGame":
+//                    self!.onCommit(data: jd)
                 default:
                     print(jd)
                 }
             })
-//            
+//
         })
+    }
+
+    func killTimer() {
+        self.ws?.close()
+        timer?.invalidate();
+        timer = nil;
+        count1 = 10;
 
     }
 
-
     func onInit(data: JSON) {
-        if !isTimerRunning {
-            Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(onTick), userInfo: nil, repeats: true);
+        if timer == nil {
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(onTick), userInfo: nil, repeats: true);
         }
+
 
         srvTime = data["t"].doubleValue / 1000
 
@@ -173,11 +190,9 @@ class LiveData {
         }
 
 //        print(self.gameData?.getDrawText() ?? "");
-
+        print("update\n")
         self.render()
         self.onMsg!(self.gameData?.getDrawText() ?? "")
-
-
     }
 
     @objc func onTick() {
@@ -186,8 +201,10 @@ class LiveData {
         srvTime += 1.0
         renderRight()
     }
-
+    var isRenderRight: Bool = false;
+    var count1: Int = 10;
     func renderRight() {
+
         UIGraphicsBeginImageContext(CGSize(width: 512, height: 512))
         let ctx = UIGraphicsGetCurrentContext();
         //fill bg
@@ -204,14 +221,28 @@ class LiveData {
         (s as NSString).draw(at: CGPoint(x: 0, y: 0),
                 withAttributes: [NSFontAttributeName: font!,
                                  NSForegroundColorAttributeName: UIColor.green])
-        let img = UIGraphicsGetImageFromCurrentImageContext();
+        imgR = UIGraphicsGetImageFromCurrentImageContext();
         UIGraphicsEndImageContext();
 
         let rect = CGRect(x: 1160, y: 910, width: 512, height: 512);
-        self.session?.addPixelBufferSource(img, with: rect)
-    }
+        if isRenderRight {
+            self.session?.unregisterSource();
+        }
+        isRenderRight = true;
 
+        count1 -= 1;
+        if count1 < 0 {
+            killTimer()
+            return
+        }
+        self.session?.addPixelBufferSource(imgR, with: rect)
+//        print(rect)
+        imgR = nil
+    }
+    var imgL: UIImage?
+    var imgR: UIImage?
     func render() {
+        return;
         if (self.session != nil) {
             UIGraphicsBeginImageContext(CGSize(width: 512, height: 512))
             let ctx = UIGraphicsGetCurrentContext();
@@ -231,11 +262,12 @@ class LiveData {
             (s as NSString).draw(at: CGPoint(x: 0, y: 0), withAttributes: [NSFontAttributeName: font!, NSForegroundColorAttributeName: UIColor.red])
             s = self.gameData?.getRPDrawText() ?? ""
             (s as NSString).draw(at: CGPoint(x: 0, y: fontSize), withAttributes: [NSFontAttributeName: font!, NSForegroundColorAttributeName: UIColor.white])
-            let image2 = UIGraphicsGetImageFromCurrentImageContext();
+            imgL = UIGraphicsGetImageFromCurrentImageContext();
             UIGraphicsEndImageContext();
 
             let rect = CGRect(x: 490, y: 910, width: 512, height: 512);
-            self.session?.addPixelBufferSource(image2, with: rect)
+            self.session?.addPixelBufferSource(imgL, with: rect)
+            imgL = nil
         }
     }
 }

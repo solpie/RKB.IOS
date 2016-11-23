@@ -3,10 +3,12 @@ import VideoCore
 import AVFoundation
 import SwiftyJSON
 
-class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutputObjectsDelegate {
+class ViewController: UIViewController,
+        VCSessionDelegate,
+        AVCaptureMetadataOutputObjectsDelegate {
+
 
     @IBOutlet weak var previewView: UIView!
-    @IBOutlet weak var webView: UIWebView!
 
     @IBOutlet weak var panelView: UIView!
     @IBOutlet weak var rtmpUrlTXF: UITextField!
@@ -18,32 +20,48 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
 
     @IBOutlet weak var gameInfo: UILabel!
 
+    @IBOutlet weak var volSlider: UISlider!
+
+
     var isPanelViewMoving: Bool = false
     var session: VCSimpleSession?
+    var bitrate: Int = 0;
 
     var liveData: LiveData!
-
+    var picker: Picker!
 
     var captureSession: AVCaptureSession!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.initUI()
         UIApplication.shared.isIdleTimerDisabled = true;
         // Do any additional setup after loading the view, typically from a nib.
         initVideoCore()
+        initUI()
 
-//        initWebView()
-
+        test()
     }
 
-    func initWebView() {
-        if let url = URL(string: "http://apple.com") {
-            print("load url")
-            let request = URLRequest(url: url)
-            webView.loadRequest(request)
-        }
+    @IBAction func onSwipeRight(_ sender: Any) {
+        print("swipe right")
+        volSlider.isHidden = false
     }
+
+    @IBAction func onVolChange(_ sender: Any) {
+//        volSlider.value
+    }
+
+    func test() {
+        rtmpUrlTXF.text = "rtmp://rtmp.icassi.us/live/test"
+        gameIdTXF.text = "78"
+    }
+//    func initWebView() {
+//        if let url = URL(string: "http://apple.com") {
+//            print("load url")
+//            let request = URLRequest(url: url)
+//            webView.loadRequest(request)
+//        }
+//    }
     ///scan
     func found(code: String) {
 //        {"rtmp":"rtmp://rtmp.icassi.us/live/test1","gameId":"78"}
@@ -61,6 +79,13 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
         print(code)
     }
 
+    @IBAction func onBit(_ sender: Any) {
+//        if (self.menu?.isDescendant(of: self.view) == true) {
+//            self.menu?.hideMenu()
+//        } else {
+//            self.menu?.showMenuFromView(self.view)
+//        }
+    }
 //////////////////////scan
     @IBAction func onTouchScan(_ sender: Any) {
         view.backgroundColor = UIColor.black
@@ -89,41 +114,46 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
         let feature = features?[0] as! CIQRCodeFeature
         found(code: feature.messageString!)
 
-        oneButtonAlert.show()
+        if oneButtonAlert == nil {
+            oneButtonAlert = UIAlertView(title: "！",
+                    message: "扫码完成", delegate: nil, cancelButtonTitle: "确定")
+
+        }
+        oneButtonAlert?.show()
 
         Timer.scheduledTimer(timeInterval: 2, target: self, selector: #selector(hideAlert), userInfo: nil, repeats: false);
-
     }
-    let oneButtonAlert:UIAlertView = UIAlertView(title: "！", message: "扫码完成", delegate: nil, cancelButtonTitle: "确定")
 
-    func hideAlert()
-    {
-        oneButtonAlert.dismiss(withClickedButtonIndex: 0, animated: true)
+    var oneButtonAlert: UIAlertView?
+    func hideAlert() {
+        oneButtonAlert?.dismiss(withClickedButtonIndex: 0, animated: true)
     }
 
     let rect1 = CGRect(x: 300, y: 300, width: 512, height: 512);
 
-    func captureWebView() {
-        //capture the screenshot
-
-//        let rect = CGRect(x: 300, y: 300, width: 512, height: 512);
-        UIGraphicsBeginImageContext(rect1.size)
-        if let ctx = UIGraphicsGetCurrentContext() {
-            webView.layer.render(in: ctx)
-            let screenshot = UIGraphicsGetImageFromCurrentImageContext()
-//            UIGraphicsEndImageContext()
-
-            self.session?.addPixelBufferSource(screenshot, with: rect1)
-        }
-
-    }
+//    func captureWebView() {
+//        //capture the screenshot
+////        let rect = CGRect(x: 300, y: 300, width: 512, height: 512);
+//        UIGraphicsBeginImageContext(rect1.size)
+//        if let ctx = UIGraphicsGetCurrentContext() {
+//            webView.layer.render(in: ctx)
+//            let screenshot = UIGraphicsGetImageFromCurrentImageContext()
+////            UIGraphicsEndImageContext()
+//
+//            self.session?.addPixelBufferSource(screenshot, with: rect1)
+//        }
+//
+//    }
 
     @IBAction func onTouchSync(_ sender: Any) {
 //        Timer.scheduledTimer(timeInterval: 0.033, target: self, selector: #selector(captureWebView), userInfo: nil, repeats: true);
 //        captureWebView()
-        liveData = LiveData(wsUrl: "http://tcp.lb.hoopchina.com:3081", gameId: gameIdTXF.text ?? "")
+        if liveData == nil {
+            liveData = LiveData(wsUrl: "http://tcp.lb.hoopchina.com:3081", gameId: gameIdTXF.text ?? "")
+        } else {
+            liveData.con(wsUrl: "http://tcp.lb.hoopchina.com:3081", gameId: gameIdTXF.text ?? "")
+        }
         self.liveData.session = session
-
         self.liveData.onMsg = self.onMsg
         view.endEditing(true);
     }
@@ -131,6 +161,11 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
     func onMsg(msg: String) {
         print(msg)
         gameInfo.text = msg
+    }
+
+    func onPick(b: Int) {
+        self.bitrate = b
+        session?.bitrate = Int32(b)
     }
 
     override var canBecomeFirstResponder: Bool {
@@ -144,18 +179,16 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
     override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
             print("shake!")
-            abort()
+//            abort()
 //            UIControl().sendAction(Selector("suspend"), to: UIApplication.shared, for: nil)
         }
     }
 
     @IBAction func onTouchBtnConnect(_ sender: Any) {
-
         if rtmpUrlTXF.text != "" {
             switch session?.rtmpSessionState {
             case .none, .previewStarted?, .ended?, .error?:
                 session?.startRtmpSession(withURL: rtmpUrlTXF.text, andStreamKey: "")
-
             default:
                 session?.endRtmpSession()
                 break
@@ -164,12 +197,17 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
 
     }
 
-
     func initUI() {
+        picker = Picker()
+        view.addSubview(picker.ui)
+        picker.onPick = self.onPick
+
         let bottomFrame = CGRect(origin: CGPoint(x: 0, y: view.bounds.size.height), size: scoreView.frame.size)
         scoreView.frame = bottomFrame
+        volSlider.frame.origin = CGPoint(x: 50, y: view.bounds.size.height - 75)
+        volSlider.isHidden = true
 
-//        
+
         //
         let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(onSwipe))
         swipeUp.direction = UISwipeGestureRecognizerDirection.up
@@ -178,6 +216,7 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
         let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(onSwipeDown))
         swipeDown.direction = UISwipeGestureRecognizerDirection.down
         view.addGestureRecognizer(swipeDown)
+
     }
 
     func onSwipeDown(recognizer: UISwipeGestureRecognizer) {
@@ -239,8 +278,17 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
     }
 
     func initVideoCore() {
+//        if self.bitrate!=0{
+//
+//        }
         session = VCSimpleSession(videoSize: CGSize(width: 1280, height: 720), frameRate: 30, bitrate: 1000000, useInterfaceOrientation: true)
         session?.aspectMode = VCAspectMode.aspectModeFit
+        
+
+//        session?.continuousAutofocus = true
+//        session?.continuousExposure = true
+
+
 //        session!.orientationLocked = true
         previewView.addSubview(session!.previewView)
         session!.previewView.frame = previewView.bounds
@@ -296,7 +344,6 @@ class ViewController: UIViewController, VCSessionDelegate, AVCaptureMetadataOutp
 //            break
 //        }
 //    }
-
 
 }
 
