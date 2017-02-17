@@ -22,6 +22,8 @@ class GameData {
     var GameState: String?
     var LeftNameFull: String
     var RightNameFull: String
+      var gameTime:Int = 0;
+   
     init(idx: Int,
          leftName: String, leftScore: Int, leftFoul: Int,
          rightName: String, rightScore: Int, rightFoul: Int) {
@@ -44,15 +46,17 @@ class GameData {
         self.R_name = rn
         self.R_score = rightScore;
         self.R_foul = rightFoul;
+        
+        
     }
-
+ 
     func getDrawText() -> String {
-        return "第\(self.GameIdx)场 state:\(GameState)\n蓝方:\(LeftNameFull) vs 红方:\(RightNameFull) \n得分:\(self.L_score) 犯规:\(self.L_foul)\t\t得分:\(self.R_score) 犯规:\(self.R_foul)\n";
+        return "第\(self.GameIdx)场 time:\(gameTime)\n蓝方:\(LeftNameFull) vs 红方:\(RightNameFull) \n得分:\(self.L_score) 犯规:\(self.L_foul)\t\t得分:\(self.R_score) 犯规:\(self.R_foul)\n";
     }
 
 
     func getInfoDrawText() -> String {
-        return "idx:\(self.GameIdx) state:\n"
+        return "idx:\(self.GameIdx) time:\(self.gameTime)\n"
     }
 
 
@@ -74,7 +78,7 @@ class LiveData {
     var timeCounter: Int = 0
     var isTimerRunning: Bool = false
     var isCon: Bool = false
-    var timer: Timer?;
+    var srvTimer: Timer?;
 //    var nowDate: Date?
     var srvTime: Double = 0
 
@@ -119,8 +123,12 @@ class LiveData {
                     self!.onInit(data: jd)
                 case "updateScore":
                     self!.onUpdate(data: jd)
-//                case "commitGame":
+//                    self!.startTimer();
+                case "commitGame":
+                    self!.stopTimer();
 //                    self!.onCommit(data: jd)
+                case "timeStart":
+                    self!.startTimer()
                 default:
                     print(jd)
                 }
@@ -131,15 +139,18 @@ class LiveData {
 
     func killTimer() {
         
-        timer?.invalidate();
-        timer = nil;
+        srvTimer?.invalidate();
+        srvTimer = nil;
         count1 = 10;
 
     }
-
+    func onTimeStart() -> Void {
+        startTimer();
+        
+    }
     func onInit(data: JSON) {
-        if timer == nil {
-            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(onTick), userInfo: nil, repeats: true);
+        if srvTimer == nil {
+            srvTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(onTick), userInfo: nil, repeats: true);
         }
 
 
@@ -272,6 +283,33 @@ class LiveData {
             let rect = CGRect(x: 490, y: 910, width: 512, height: 512);
             self.session?.addPixelBufferSource(imgL, with: rect)
             imgL = nil
+        }
+    }
+    
+    
+    var timer: Timer?;
+  
+    @objc func onGameTick() -> Void {
+        self.gameData?.gameTime+=1;
+           self.onMsg!(self.gameData?.getDrawText() ?? "")
+    }
+    func startTimer() -> Void {
+        if timer == nil {
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(onGameTick), userInfo: nil, repeats: true);
+        }
+        else{
+            timer?.invalidate();
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(onGameTick), userInfo: nil, repeats: true);
+        }
+        
+    }
+    func stopTimer() -> Void {
+        if timer==nil{
+            
+        }
+        else{
+            self.gameData?.gameTime = 0
+            timer?.invalidate();
         }
     }
 }

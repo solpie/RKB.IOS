@@ -124,13 +124,6 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="0.5" colorSpace="calibratedWhite"/>
                             </view>
-                            <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="JEp-zY-3fW" userLabel="Vol Slider">
-                                <rect key="frame" x="48" y="200" width="404" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <connections>
-                                    <action selector="onVolChange:" destination="vXZ-lx-hvc" eventType="valueChanged" id="uQt-WN-pFN"/>
-                                </connections>
-                            </slider>
                             <view contentMode="bottom" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="uL1-Yb-Y6B" userLabel="Score View">
                                 <rect key="frame" x="0.0" y="159" width="673" height="100"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMinX="YES" widthSizable="YES" flexibleMaxX="YES" flexibleMinY="YES"/>
@@ -176,7 +169,6 @@
                         <outlet property="previewView" destination="l9C-zN-svY" id="HH2-bj-chh"/>
                         <outlet property="rtmpUrlTXF" destination="QOy-GZ-zya" id="NDg-fy-PbI"/>
                         <outlet property="scoreView" destination="uL1-Yb-Y6B" id="0us-og-Iux"/>
-                        <outlet property="volSlider" destination="JEp-zY-3fW" id="nVa-LA-oF0"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="x5A-6p-PRh" sceneMemberID="firstResponder"/>

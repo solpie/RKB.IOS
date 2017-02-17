@@ -15,6 +15,7 @@ PODS:
   - boost/shared_ptr-includes (1.51.0)
   - boost/string_algorithms-includes (1.51.0)
   - glm (0.9.7.1)
+  - PermissionScope (1.0.3)
   - SIOSocket (0.2.0)
   - SwiftyJSON (2.3.2)
   - UriParser-cpp (0.1.3)
@@ -25,6 +26,7 @@ PODS:
 
 DEPENDENCIES:
   - glm (from `https://github.com/maxcampolo/glm.git`)
+  - PermissionScope (from `https://github.com/nickoneill/PermissionScope.git`, branch `swift3`)
   - SIOSocket
   - SwiftyJSON (from `https://github.com/BaiduHiDeviOS/SwiftyJSON.git`, branch `swift3`)
   - VideoCore/Swift (from `https://github.com/maxcampolo/VideoCore.git`)
@@ -32,6 +34,9 @@ DEPENDENCIES:
 EXTERNAL SOURCES:
   glm:
     :git: https://github.com/maxcampolo/glm.git
+  PermissionScope:
+    :branch: swift3
+    :git: https://github.com/nickoneill/PermissionScope.git
   SwiftyJSON:
     :branch: swift3
     :git: https://github.com/BaiduHiDeviOS/SwiftyJSON.git
@@ -42,6 +47,9 @@ CHECKOUT OPTIONS:
   glm:
     :commit: 2cfe1129de430e4b23e811c5e0800989283af224
     :git: https://github.com/maxcampolo/glm.git
+  PermissionScope:
+    :commit: 7c2d33048f8d17e117f76022967796a014fd8092
+    :git: https://github.com/nickoneill/PermissionScope.git
   SwiftyJSON:
     :commit: de5dc3b1b421805769590d331178551bbb0e5733
     :git: https://github.com/BaiduHiDeviOS/SwiftyJSON.git
@@ -52,11 +60,12 @@ CHECKOUT OPTIONS:
 SPEC CHECKSUMS:
   boost: 6c5c8d8daef26ac83c1e1c00ad14de62b80161d7
   glm: e83c95e7a6359bdaeb23e6089ac826dd62c5c09f
+  PermissionScope: 3ee3e8a4a962b7621400c136a63ae1e16ecf1718
   SIOSocket: 2facc0bd02ae72d98c223634a46dd8ebdf9be321
   SwiftyJSON: 6118fb49d7519c4d31a0c1f3d5af936e9047b556
   UriParser-cpp: cbbe00080ee432ec4833dca863a7fc83adc9b01a
   VideoCore: b413e13d819c31093200ac35874086a7601d0821
 
-PODFILE CHECKSUM: c448e4330a884fe799c7a9d88442ce107dbe8eb8
+PODFILE CHECKSUM: 8ca3587ad1cb78c7231ecb636440ac91a64fa822
 
 COCOAPODS: 1.1.1

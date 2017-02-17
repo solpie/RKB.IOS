@@ -14,5 +14,8 @@ pod 'VideoCore/Swift', :git => 'https://github.com/maxcampolo/VideoCore.git'
 #pod ’Socket.IO-Client-Swift’
 pod ’SIOSocket’
 pod 'SwiftyJSON', git: 'https://github.com/BaiduHiDeviOS/SwiftyJSON.git', branch: 'swift3'
+
+pod 'PermissionScope',git:'https://github.com/nickoneill/PermissionScope.git',branch: 'swift3'
+
 end
 

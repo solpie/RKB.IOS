@@ -2,7 +2,7 @@ import UIKit
 import VideoCore
 import AVFoundation
 import SwiftyJSON
-
+import PermissionScope
 class ViewController: UIViewController,
         VCSessionDelegate,
         AVCaptureMetadataOutputObjectsDelegate {
@@ -21,7 +21,6 @@ class ViewController: UIViewController,
 
     @IBOutlet weak var gameInfo: UILabel!
 
-    @IBOutlet weak var volSlider: UISlider!
 
 
     var isPanelViewMoving: Bool = false
@@ -34,26 +33,85 @@ class ViewController: UIViewController,
 
     var captureSession: AVCaptureSession!
 
+     let pscope = PermissionScope()
     override func viewDidLoad() {
         super.viewDidLoad()
         UIApplication.shared.isIdleTimerDisabled = true;
         
         
-//        if AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) == .notDetermined {
-//            AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: { (granted: Bool) in
-//                if granted {
-//                    print("granted")
-//                }
-//                else {
-//                    print("not granted")
-//                }
-//            })
-//        }
+        
+        
+        self.pscope.addPermission(CameraPermission(),
+                                  message: "直播需要摄像头权限")
+        //                    self.pscope.addPermission(NotificationsPermission(notificationCategories: nil),
+        //                                         message: "We use this to send you\r\nspam and love notes")
+        //                    self.pscope.addPermission(LocationWhileInUsePermission(),
+        //                                         message: "We use this to track\r\nwhere you live")
+        
+        // Show dialog with callbacks
+        self.pscope.show({ finished, results in
+            print("got results \(results)")
+        }, cancelled: { (results) -> Void in
+            print("thing was cancelled")
+        })
+        //                    self.checkCamera();
+        if AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo) == .notDetermined {
+            AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: { (granted: Bool) in
+                if granted {
+                    print("granted")
+                
+                }
+                else {
+                    print("not granted")
+                    
+                    
+                    self.pscope.addPermission(CameraPermission(),
+                                         message: "直播需要摄像头权限")
+//                    self.pscope.addPermission(NotificationsPermission(notificationCategories: nil),
+//                                         message: "We use this to send you\r\nspam and love notes")
+//                    self.pscope.addPermission(LocationWhileInUsePermission(),
+//                                         message: "We use this to track\r\nwhere you live")
+                    
+                    // Show dialog with callbacks
+                    self.pscope.show({ finished, results in
+                        print("got results \(results)")
+                    }, cancelled: { (results) -> Void in
+                        print("thing was cancelled")
+                    })
+//                    self.checkCamera();	
+                }
+            })
+        }
         // Do any additional setup after loading the view, typically from a nib.
         initVideoCore()
         initUI()
-
-        test()
+       loadLocalData()
+//        test()
+    }
+    func loadLocalData(){
+        let data = UserDefaults.standard;
+     
+        if let rtmpUrl  = data.string(forKey: "rtmpUrl"){
+            print(rtmpUrl);
+            self.rtmpUrlTXF.text = rtmpUrl;
+        }
+    
+    }
+    func checkCamera() {
+        let authStatus = AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo)
+        switch authStatus {
+        case AVAuthorizationStatus.authorized:
+            print("AVAuthorizationStatus.Authorized")
+        case AVAuthorizationStatus.denied:
+            print("AVAuthorizationStatus.Denied")
+        case AVAuthorizationStatus.notDetermined:
+            print("AVAuthorizationStatus.NotDetermined")
+        case AVAuthorizationStatus.restricted:
+            print("AVAuthorizationStatus.Restricted")
+        default:
+            print("AVAuthorizationStatus.Default")
+        }
+        
     }
     override var canBecomeFirstResponder: Bool {
         return true
@@ -72,6 +130,7 @@ class ViewController: UIViewController,
 
     func test() {
         rtmpUrlTXF.text = "rtmp://rtmp.icassi.us/live/test"
+        rtmpUrlTXF.text = "rtmp://202.96.203.27/live/test"
         gameIdTXF.text = "78"
     }
 
@@ -85,10 +144,11 @@ class ViewController: UIViewController,
 //        Timer.scheduledTimer(timeInterval: 0.033, target: self, selector: #selector(captureWebView), userInfo: nil, repeats: true);
 //        captureWebView()
         if liveData == nil {
-            liveData = LiveData(wsUrl: "http://tcp.lb.hoopchina.com:3081", gameId: gameIdTXF.text ?? "")
+            liveData = LiveData(wsUrl: "http://tcp.lb.liangle.com:3081", gameId: gameIdTXF.text ?? "")
         } else {
-            liveData.con(wsUrl: "http://tcp.lb.hoopchina.com:3081", gameId: gameIdTXF.text ?? "")
+            liveData.con(wsUrl: "http://tcp.lb.liangle.com:3081", gameId: gameIdTXF.text ?? "")
         }
+        
         self.liveData.session = session
         self.liveData.onMsg = self.onMsg
         view.endEditing(true);
@@ -114,7 +174,7 @@ class ViewController: UIViewController,
 
     @IBAction func onSwipeRight(_ sender: Any) {
         print("swipe right")
-        volSlider.isHidden = false
+//        volSlider.isHidden = false
     }
 
     override func motionEnded(_ motion: UIEventSubtype, with event: UIEvent?) {
@@ -284,7 +344,11 @@ class ViewController: UIViewController,
         print(msg)
         gameInfo.text = msg
     }
-
+    
+    func onVol(v:Float){
+        session?.micGain = v
+    }
+    
     func onPick(b: Int,title:String) {
         picker.fadeOut()
         
@@ -300,6 +364,8 @@ class ViewController: UIViewController,
 
     func con() {
         if rtmpUrlTXF.text != "" {
+                 let data = UserDefaults.standard;
+               data.setValue(rtmpUrlTXF.text, forKey: "rtmpUrl")
             switch session?.rtmpSessionState {
             case .none, .previewStarted?, .ended?, .error?:
                 session?.startRtmpSession(withURL: rtmpUrlTXF.text, andStreamKey: "")
@@ -317,24 +383,23 @@ class ViewController: UIViewController,
         session = VCSimpleSession(videoSize: CGSize(width: 1280, height: 720), frameRate: 30, bitrate: Int32(bitrate), useInterfaceOrientation: true)
         session?.aspectMode = VCAspectMode.aspectModeFit
 
+//        session?.micGain = 1.0
 //        session?.continuousAutofocus = true
 //        session?.continuousExposure = true
 //        session!.orientationLocked = true
+        
         previewView.addSubview(session!.previewView)
         session!.previewView.frame = previewView.bounds
         session!.delegate = self
     }
 
     func initUI() {
-//        AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo,
         picker = Picker(parent:view)
+        picker.onVol = self.onVol
         picker.onPick = self.onPick
 
         let bottomFrame = CGRect(origin: CGPoint(x: 0, y: view.bounds.size.height), size: scoreView.frame.size)
         scoreView.frame = bottomFrame
-        volSlider.frame.origin = CGPoint(x: 50, y: view.bounds.size.height - 75)
-        volSlider.isHidden = true
-
 
         //
         let swipeUp = UISwipeGestureRecognizer(target: self, action: #selector(onSwipe))
@@ -345,35 +410,6 @@ class ViewController: UIViewController,
         swipeDown.direction = UISwipeGestureRecognizerDirection.down
         view.addGestureRecognizer(swipeDown)
     }
-
-
-
-
-//    @IBAction func btnFilterTouch(_ sender: AnyObject) {
-//        switch self.session!.filter {
-//
-//        case .normal:
-//            self.session!.filter = .gray
-//
-//        case .gray:
-//            self.session!.filter = .invertColors
-//
-//        case .invertColors:
-//            self.session!.filter = .sepia
-//
-//        case .sepia:
-//            self.session!.filter = .fisheye
-//
-//        case .fisheye:
-//            self.session!.filter = .glow
-//
-//        case .glow:
-//            self.session!.filter = .normal
-//
-//        default: // Future proofing
-//            break
-//        }
-//    }
 
 }
 

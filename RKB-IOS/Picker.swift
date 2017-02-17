@@ -12,25 +12,39 @@ import UIKit
 class Picker {
     let ui: UIView
 //    var bg: UIView?
-    let ctn:UIView
+    let ctn: UIView
     let btnArr = ["2.5M 码率": ["idx": 0, "bitrate": 2500000],
                   "2M 码率": ["idx": 1, "bitrate": 2000000],
                   "1.5M 码率": ["idx": 2, "bitrate": 1500000],
                   "1M 码率": ["idx": 3, "bitrate": 1000000],
                   "退出": ["idx": 4, "bitrate": 0]]
-    var onPick: ((_: Int,_:String) -> Void)!
+    var onPick: ((_: Int, _: String) -> Void)!
+    var onVol: ((_:Float) -> Void)!
 
-    init(parent:UIView) {
+    let volSlider: UISlider
+
+    init(parent: UIView) {
         let btnHeight = 60
-        
+
         ctn = UIView(frame: CGRect(x: 0, y: 0, width: 200, height: btnHeight * 5))
         ctn.backgroundColor = UIColor.white
-        
-        ui = UIView(frame: CGRect(x: 0, y: 0, width:Int(parent.frame.size.width), height: Int(parent.frame.size.height)))
+
+        ui = UIView(frame: CGRect(x: 0, y: 0, width: Int(parent.frame.size.width), height: Int(parent.frame.size.height)))
 //        ui.alpha = 0.3
-        ui.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.3)
+        ui.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5)
         ui.addSubview(ctn)
+
+
+        volSlider = UISlider()
+        volSlider.transform = CGAffineTransform(rotationAngle: CGFloat(-M_PI_2))
+        volSlider.frame = CGRect(x: 15, y: 120, width: volSlider.frame.size.width, height: 200)
+        volSlider.maximumValue = 1.0
+        volSlider.minimumValue = 0.05
         
+        volSlider.addTarget(self, action:#selector(Picker.onValue(_:)), for: .valueChanged)
+        ui.addSubview(volSlider)
+
+
         for (title, v) in btnArr {
             let e = UITapGestureRecognizer(target: self, action: #selector(self.tgButton(_:)))
             let btn = UIButton(frame: CGRect(x: 0, y: btnHeight * v["idx"]!, width: 200, height: btnHeight))
@@ -41,11 +55,19 @@ class Picker {
             btn.setTitleColor(UIColor.black, for: .normal)
             ctn.addSubview(btn)
         }
-        
+
         self.ctn.frame.origin = CGPoint(x: parent.bounds.size.width, y: 0)
         parent.addSubview(ui)
         
         ui.isHidden = true
+    }
+
+    @objc func onValue(_ sender: UISlider!) {
+//        print(sender.value)
+//        if let v = sender.value {
+//            onVol(v)
+//        }
+        onVol(sender.value)
     }
 
     func fadeOut() {
@@ -58,8 +80,8 @@ class Picker {
             self.ui.isHidden = true
         })
     }
-    func fadeIn()
-    {
+
+    func fadeIn() {
         self.ui.isHidden = false
         UIView.animate(withDuration: 0.2, delay: 0.0, options: .curveEaseOut, animations: {
             var f = self.ctn.frame
@@ -67,26 +89,27 @@ class Picker {
             self.ctn.frame = f
         }, completion: {
             finished in
-            
+
         })
-        
+
     }
-    func getTitle(b:Int)->String{
-        for (title,v) in btnArr{
-            if v["bitrate"]==b{
+
+    func getTitle(b: Int) -> String {
+        for (title, v) in btnArr {
+            if v["bitrate"] == b {
                 return title
             }
         }
         return ""
     }
-    
+
     @objc func tgButton(_ sender: UITapGestureRecognizer) {
         if let b = sender.view?.tag {
             print("trigger", b)
             if b == 0 {
                 abort()
             } else {
-                self.onPick!(b,getTitle(b: b))
+                self.onPick!(b, getTitle(b: b))
             }
         }
     }
