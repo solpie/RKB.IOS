@@ -377,7 +377,7 @@ AVCaptureMetadataOutputObjectsDelegate {
     
     func initVideoCore() {
         if bitrate == 0 {
-            bitrate = 2000000
+            bitrate = 1000000
         }
         session = VCSimpleSession(videoSize: CGSize(width: 1280, height: 720), frameRate: 30, bitrate: Int32(bitrate), useInterfaceOrientation: true)
         session?.aspectMode = VCAspectMode.aspectModeFit
